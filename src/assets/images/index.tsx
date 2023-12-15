@@ -30,5 +30,7 @@ import plusIcon from '../images/plusIcon/plusIcon.png'
 import minus from '../images/minus/minus.png'
 import cup from '../images/cup/cup.png'
 import keyChain from '../images/keyChain/keyChain.png'
+import english from '../images/english/english.png'
+import arabic from '../images/arabic/arabic.png'
 
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic }

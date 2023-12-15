@@ -77,6 +77,7 @@ const AddChildScreen = () => {
         }
     };
 
+
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>

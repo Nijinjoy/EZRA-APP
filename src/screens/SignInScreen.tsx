@@ -1,15 +1,18 @@
-import { View, Text, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Image, Pressable, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { biometricIcon, eye, nextArrow, signinIntersection } from '../assets/images';
 import { colors } from '../constants/Colors';
 import ButtonComponent from '../components/ButtonComponent';
 import TextInputComponent from '../components/TextInputComponent';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import PasswordComponent from '../components/PasswordComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInScreen = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' })
     const Navigation = useNavigation()
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.violet }}>
             <View style={{ backgroundColor: colors.white, height: HEIGHT * 0.92, borderBottomLeftRadius: WIDTH * 0.07, borderBottomRightRadius: WIDTH * 0.07, }}>
@@ -24,6 +27,8 @@ const SignInScreen = () => {
                                 placeholder="Email address"
                                 background={colors.grey}
                                 width={WIDTH * 0.85}
+                                value={formData.email}
+                                onChangeText={(text) => handleInputChange('email', text)}
                             />
                             <Text style={{ fontSize: 14, textAlign: 'right', color: colors.red, marginVertical: HEIGHT * 0.01 }}>Username doesn't exists</Text>
                         </View>
@@ -35,11 +40,13 @@ const SignInScreen = () => {
                                 placeholder="Password"
                                 passwordBackground={colors.white}
                                 background={colors.grey}
+                                value={formData.password}
+                                onChangeText={(text) => handleInputChange('password', text)}
                             />
                             <Text style={{ fontSize: 14, textAlign: 'right', marginVertical: HEIGHT * 0.01, color: colors.darkViolet }}>Forgot password ?</Text>
                         </View>
                         <View style={{ marginTop: HEIGHT * 0.03, alignItems: 'center' }}>
-                            <ButtonComponent text="Sign in" nextarrow={nextArrow} background={colors.darkViolet} textColor={colors.white} />
+                            <ButtonComponent /* onPress={handleSignIn} */ text="Sign in" nextarrow={nextArrow} background={colors.darkViolet} textColor={colors.white} />
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }}>
                                 <Text style={{ fontSize: 14, color: colors.lightGrey }}>Don't have an account.</Text>
                                 <Pressable onPress={() => Navigation.navigate('SignUpScreen')}>
@@ -57,5 +64,6 @@ const SignInScreen = () => {
         </View >
     )
 }
+
 
 export default SignInScreen

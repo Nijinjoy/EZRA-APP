@@ -1,9 +1,12 @@
-import { View, Text, ImageBackground, FlatList, Pressable, Image } from 'react-native'
-import React from 'react'
+import { View, Text, ImageBackground, FlatList, Pressable, Image, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
 import { drawerArrow, drawerProfile, drawerShade, drawingsIcon, evaluateIcon, faq } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { colors } from '../constants/Colors';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LanguageComponent from '../components/LanguageComponent';
+import { CommonActions } from '@react-navigation/native';
 
 const DATA = [
     {
@@ -57,15 +60,46 @@ const DATA = [
 
 const DrawerScreen = () => {
     const Navigation = useNavigation()
+
+    // const onLogout = () => {
+    //     Navigation.reset({
+    //         index: 0,
+    //         routes: [{ name: 'SignInScreen' }],
+    //     });
+    // };
+
+    const onLogout = async () => {
+        await AsyncStorage.setItem('isLoggedIn', 'false');
+        Navigation.reset({
+            index: 0,
+            routes: [{ name: 'SignInScreen' }],
+        });
+    };
+
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            // Check the login status when the component mounts
+            const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+            if (isLoggedIn !== 'true') {
+                // If the user is not logged in, navigate to the sign-in screen
+                Navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'SignInScreen' }],
+                });
+            }
+        };
+        checkLoginStatus();
+    }, [Navigation]);
+
     return (
-        <View style={{}}>
+        <View style={{ flex: 1 }}>
             <ImageBackground source={drawerShade} style={{ width: WIDTH * 0.749, height: HEIGHT * 0.25, backgroundColor: colors.lightBlue }} resizeMode='contain'>
                 <View style={{ margin: HEIGHT * 0.04, position: 'absolute', bottom: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 18, color: colors.darkViolet }}>Aaliya Ahammed</Text>
                     <Text style={{ fontSize: 13, color: colors.lightGrey }}>aaliya@gmail.com</Text>
                 </View>
             </ImageBackground >
-            <View>
+            <ScrollView >
                 <FlatList
                     data={DATA}
                     keyExtractor={(item) => item.id}
@@ -85,24 +119,16 @@ const DrawerScreen = () => {
                         )
                     }}
                 />
-                <View style={{ borderRadius: WIDTH * 0.01, width: WIDTH * 0.487, height: HEIGHT * 0.046, flexDirection: 'row', alignItems: "center", justifyContent: 'center', backgroundColor: colors.grey, marginHorizontal: WIDTH * 0.05 }}>
-                    <View style={{ borderRadius: WIDTH * 0.01, backgroundColor: colors.white, flex: 0.5, justifyContent: "center", alignItems: 'center', padding: WIDTH * 0.02, margin: WIDTH * 0.005 }}>
-                        <Text style={{ color: colors.darkViolet, fontSize: 13 }}>English</Text>
-                    </View>
-                    <View style={{ flex: 0.5, justifyContent: "center", alignItems: 'center' }}>
-                        <Text style={{ color: colors.darkViolet, fontSize: 13, textAlign: 'right' }}>Arabic</Text>
-                    </View>
-                </View>
-                {/* logout */}
-                <View style={{ borderWidth: 0.5, width: WIDTH * 0.22, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.04 }}>
+                <LanguageComponent />
+
+                <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.22, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.04 }} onPress={onLogout}>
                     <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
-                </View>
-                {/* logout */}
-            </View>
+                </Pressable>
+
+            </ScrollView>
 
         </View >
     )
 }
-
 
 export default DrawerScreen
