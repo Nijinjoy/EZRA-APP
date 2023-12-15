@@ -78,10 +78,8 @@ const DrawerScreen = () => {
 
     useEffect(() => {
         const checkLoginStatus = async () => {
-            // Check the login status when the component mounts
             const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
             if (isLoggedIn !== 'true') {
-                // If the user is not logged in, navigate to the sign-in screen
                 Navigation.reset({
                     index: 0,
                     routes: [{ name: 'SignInScreen' }],
@@ -90,6 +88,7 @@ const DrawerScreen = () => {
         };
         checkLoginStatus();
     }, [Navigation]);
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -124,7 +123,6 @@ const DrawerScreen = () => {
                 <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.22, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.04 }} onPress={onLogout}>
                     <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
                 </Pressable>
-
             </ScrollView>
 
         </View >

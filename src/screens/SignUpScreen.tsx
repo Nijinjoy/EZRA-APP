@@ -12,8 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const SignUpScreen = () => {
     const Navigation = useNavigation()
     const [formData, setFormData] = useState({ email: '', password: '', repeatPassword: '', })
-
-    console.log("formData==>", formData);
+    const [validationErrors, setValidationErrors] = useState({});
 
     const handleInputChange = (field, value) => {
         setFormData({
@@ -22,31 +21,49 @@ const SignUpScreen = () => {
         })
     }
 
-    const handleSignUp = async () => {
-        try {
-            await AsyncStorage.setItem('email', formData.email);
-            await AsyncStorage.setItem('password', formData.password);
-
-            const response = await fetch('https://hbkuesra.herokuapp.com/api/user/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                }),
-            });
-            if (response.ok) {
-                console.log('Registration successful');
-                Navigation.navigate('HomeScreen');
-            } else {
-                const errorData = await response.json();
-                console.error('Registration failed:', errorData);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+    const validateInputs = () => {
+        const errors = {};
+        if (!formData.email) {
+            errors.email = 'Email is required'
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            errors.email = 'Email is invalid.';
         }
+        if (!formData.password) {
+            errors.password = 'Password is required'
+        } else if (formData.password.length !== 6) {
+            errors.password = 'Password must contain 6 characters'
+        }
+    }
+
+    const handleSignUp = async () => {
+        if (validateInputs()) {
+            try {
+                await AsyncStorage.setItem('email', formData.email);
+                await AsyncStorage.setItem('password', formData.password);
+
+                const response = await fetch('https://hbkuesra.herokuapp.com/api/user/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password,
+                    }),
+                });
+                if (response.ok) {
+                    console.log('Registration successful');
+                    Navigation.navigate('HomeScreen');
+                } else {
+                    const errorData = await response.json();
+                    console.error('Registration failed:', errorData);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
     };
 
     return (

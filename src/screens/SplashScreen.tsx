@@ -11,40 +11,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const SplashScreen = () => {
     const Navigation = useNavigation()
 
-    // useEffect(() => {
-    //     const checkIfSignedUp = async () => {
-    //         try {
-    //             const userEmail = await AsyncStorage.getItem('email');
-    //             if (userEmail) {
-    //                 const isNewUser = await AsyncStorage.getItem('isNewUser');
-
-    //                 if (isNewUser) {
-    //                     Navigation.replace('GetStartedScreen');
-    //                 } else {
-    //                     Navigation.replace('HomeScreen');
-    //                 }
-    //             } else {
-    //                 Navigation.replace('SignUpScreen');
-    //             }
-    //         } catch (error) {
-    //             console.error('Error checking signup status:', error);
-    //         }
-    //     };
-    //     checkIfSignedUp();
-    // }, []);
-
     useEffect(() => {
-        const checkLoginStatus = async () => {
-            const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-            if (isLoggedIn !== 'true') {
-                Navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'SignInScreen' }],
-                });
+        const checkIfSignedUp = async () => {
+            try {
+                const userEmail = await AsyncStorage.getItem('email');
+                if (userEmail) {
+                    const isNewUser = await AsyncStorage.getItem('isNewUser');
+
+                    if (isNewUser) {
+                        Navigation.replace('GetStartedScreen');
+                    } else {
+                        Navigation.replace('HomeScreen');
+                    }
+                } else {
+                    Navigation.replace('SignUpScreen');
+                }
+            } catch (error) {
+                console.error('Error checking signup status:', error);
             }
         };
-        checkLoginStatus();
-    }, [Navigation]);
+        checkIfSignedUp();
+    }, []);
+
+    // useEffect(() => {
+    //     const checkLoginStatus = async () => {
+    //         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+    //         if (isLoggedIn !== 'true') {
+    //             Navigation.reset({
+    //                 index: 0,
+    //                 routes: [{ name: 'SignInScreen' }],
+    //             });
+    //         }
+    //     };
+    //     checkLoginStatus();
+    // }, [Navigation]);
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>
@@ -62,6 +62,5 @@ const SplashScreen = () => {
         </View>
     )
 }
-
 
 export default SplashScreen
