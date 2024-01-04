@@ -16,11 +16,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const AddChildScreen = () => {
     const route = useRoute();
     const { title, buttonText, isNewChild } = route.params || {};
-    const Navigation = useNavigation()
+    const Navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dateOfBirth: '' });
-
-    console.log("childInfo==>", childInfo);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -29,6 +27,7 @@ const AddChildScreen = () => {
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
+
 
     useEffect(() => {
         if (isNewChild) {
@@ -62,27 +61,62 @@ const AddChildScreen = () => {
         }));
     };
 
+    // const handleAddChild = async () => {
+    //     try {
+    //         await AsyncStorage.setItem('childName', childInfo.name);
+    //         await AsyncStorage.setItem('childGender', childInfo.gender);
+    //         await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
+
+    //         Navigation.navigate('HomeScreen', { childInfo: childInfo.name })
+
+    //         if (route.params?.isNewChild) {
+    //             setChildInfo({ name: '', gender: 'Male', dateOfBirth: ' ' });
+    //         }
+    //     } catch (error) {
+    //         console.error("Error storing child information:", error);
+    //         Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+    //     }
+    // };
+
     const handleAddChild = async () => {
         try {
+            const apiEndpoint = 'https://hbkuesra.herokuapp.com/api/child/addChild';
+            const apiData = {
+                name: childInfo.name,
+                gender: childInfo.gender,
+                dateOfBirth: childInfo.dateOfBirth,
+            };
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(apiData),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to add child');
+            }
             await AsyncStorage.setItem('childName', childInfo.name);
             await AsyncStorage.setItem('childGender', childInfo.gender);
             await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
-            Navigation.navigate('ChildrenScreen', { childName: childInfo.name })
 
+            Navigation.navigate('HomeScreen', { childInfo: childInfo.name })
             if (route.params?.isNewChild) {
                 setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
             }
-        } catch (error) {
-            console.error("Error storing child information:", error);
         }
-    };
+        catch (error) {
+            console.error('Error adding child:', error);
+            Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+        }
+    }
 
 
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title={title || "Add a Child"} backArrow={backArrow} navigation={() => Navigation.goBack()} fontsize={18} />
+                    <HeaderComponent title={title || "Add a Child"} backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ marginHorizontal: WIDTH * 0.07 }}>
@@ -106,7 +140,6 @@ const AddChildScreen = () => {
                         </Pressable>
                     </View>
                 </View>
-
                 <View style={{ marginTop: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Date of Birth</Text>
                     <Pressable onPress={showDatePicker}>
@@ -139,6 +172,5 @@ const AddChildScreen = () => {
         </View>
     )
 }
-
 export default AddChildScreen
 

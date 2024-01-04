@@ -7,7 +7,7 @@ import { colors } from '../constants/Colors';
 const TextInputComponent = ({ icon, width, placeholder, passwordBackground, onChangeText, value, background, onPress, isTextEnabled = true }) => {
 
     return (
-        <Pressable onPress={onPress} style={{ borderWidth: 1, height: HEIGHT * 0.073, borderRadius: WIDTH * 0.015, flexDirection: 'row', width: width, alignItems: 'center', justifyContent: 'center', backgroundColor: background, borderColor: colors.grey }}>
+        <Pressable onPress={onPress} style={{ borderWidth: 1, height: HEIGHT * 0.06, borderRadius: WIDTH * 0.015, flexDirection: 'row', width: width, alignItems: 'center', justifyContent: 'center', backgroundColor: background, borderColor: colors.grey }}>
             <TextInput
                 value={value}
                 placeholder={placeholder}

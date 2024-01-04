@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Alert } from 'react-native'
+import { View, Text, Image, Pressable, Alert, TouchableOpacity, TouchableHighlight } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { biometricIcon, eye, nextArrow, signinIntersection } from '../assets/images';
@@ -12,6 +12,61 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SignInScreen = () => {
     const [formData, setFormData] = useState({ email: '', password: '' })
     const Navigation = useNavigation()
+    const [validationErrors, setValidationErrors] = useState({});
+
+    const handleInputChange = (field, value) => {
+        setFormData({
+            ...formData,
+            [field]: value,
+        });
+    };
+
+    const validateInputs = () => {
+        const errors = {};
+        if (!formData.email) {
+            errors.email = 'Email is required';
+        }
+        else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            errors.email = 'Email is invalid.';
+        }
+        if (!formData.password) {
+            errors.password = 'Phone number is required';
+        } else if (formData.password.length !== 10) {
+            errors.password = 'Phone number must have 10 digits'
+        }
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSignIn = async () => {
+        if (validateInputs) {
+            try {
+                const response = await fetch('https://hbkuesra.herokuapp.com/api/user/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: formData.email,
+                        password: formData.password,
+                    }),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    await AsyncStorage.setItem('userToken', result.token);
+                    Navigation.navigate('HomeScreen');
+                } else {
+                    const errorData = await response.json();
+                    Alert.alert('Error', errorData.message || 'Invalid credentials. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error during sign-in:', error);
+                Alert.alert('Error', 'An unexpected error occurred');
+            }
+        }
+    };
+
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.violet }}>
@@ -46,13 +101,13 @@ const SignInScreen = () => {
                             <Text style={{ fontSize: 14, textAlign: 'right', marginVertical: HEIGHT * 0.01, color: colors.darkViolet }}>Forgot password ?</Text>
                         </View>
                         <View style={{ marginTop: HEIGHT * 0.03, alignItems: 'center' }}>
-                            <ButtonComponent /* onPress={handleSignIn} */ text="Sign in" nextarrow={nextArrow} background={colors.darkViolet} textColor={colors.white} />
+                            <ButtonComponent onPress={handleSignIn} text="Sign in" nextarrow={nextArrow} background={colors.darkViolet} textColor={colors.white} />
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }}>
                                 <Text style={{ fontSize: 14, color: colors.lightGrey }}>Don't have an account.</Text>
                                 <Pressable onPress={() => Navigation.navigate('SignUpScreen')}>
-                                    <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign In</Text>
+                                    <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign Up</Text>
                                 </Pressable>
-                            </View >
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -64,6 +119,5 @@ const SignInScreen = () => {
         </View >
     )
 }
-
 
 export default SignInScreen

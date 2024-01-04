@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { Children } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -15,6 +15,9 @@ import ContactScreen from '../screens/ContactScreen';
 import ChildrenScreen from '../screens/ChildrenScreen';
 import FaqScreen from '../screens/FaqScreen';
 import OrderHistoryScreen from '../screens/OrderHistoryScreen';
+import ExploreScreen from '../screens/ExploreScreen';
+import OrderDetailsScreen from '../screens/OrderDetailsScreen';
+import WearEmotionScreen from '../screens/WearEmotionScreen';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -23,10 +26,8 @@ const Drawers = () => {
     return (
         <Drawer.Navigator drawerContent={props => <DrawerScreen {...props} />}
             screenOptions={{
-                headerShown: false, overlayColor: "transparent", drawerStyle: {
-                    width: WIDTH * 0.7
-                }
-            }} initialRouteName='HomeScreen'>
+                headerShown: false, overlayColor: "transparent", drawerStyle: { width: WIDTH * 0.75 }
+            }} initialRouteName='HomeScreen' >
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
         </Drawer.Navigator>
     )
@@ -44,12 +45,16 @@ const Routes = () => {
                 <Stack.Screen name='AddChildScreen' component={AddChildScreen} />
                 <Stack.Screen name='HomeScreen' component={Drawers} />
                 <Stack.Screen name='ChildrenScreen' component={ChildrenScreen} />
+                <Stack.Screen name='ExploreScreen' component={ExploreScreen} />
                 <Stack.Screen name='FaqScreen' component={FaqScreen} />
                 <Stack.Screen name=' ContactScreen' component={ContactScreen} />
                 <Stack.Screen name='OrderHistoryScreen' component={OrderHistoryScreen} />
+                <Stack.Screen name='OrderDetailsScreen' component={OrderDetailsScreen} />
+                <Stack.Screen name='WearEmotionScreen' component={WearEmotionScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
+
 
 export default Routes

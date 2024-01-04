@@ -12,39 +12,20 @@ const SplashScreen = () => {
     const Navigation = useNavigation()
 
     useEffect(() => {
-        const checkIfSignedUp = async () => {
+        const checkUserSignedUp = async () => {
             try {
-                const userEmail = await AsyncStorage.getItem('email');
-                if (userEmail) {
-                    const isNewUser = await AsyncStorage.getItem('isNewUser');
-
-                    if (isNewUser) {
-                        Navigation.replace('GetStartedScreen');
-                    } else {
-                        Navigation.replace('HomeScreen');
-                    }
+                const userData = await AsyncStorage.getItem('userData');
+                if (userData) {
+                    Navigation.replace('HomeScreen');
                 } else {
-                    Navigation.replace('SignUpScreen');
+                    Navigation.replace('GetStartedScreen');
                 }
             } catch (error) {
-                console.error('Error checking signup status:', error);
+                console.error('Error checking user signup status:', error);
             }
         };
-        checkIfSignedUp();
+        checkUserSignedUp();
     }, []);
-
-    // useEffect(() => {
-    //     const checkLoginStatus = async () => {
-    //         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-    //         if (isLoggedIn !== 'true') {
-    //             Navigation.reset({
-    //                 index: 0,
-    //                 routes: [{ name: 'SignInScreen' }],
-    //             });
-    //         }
-    //     };
-    //     checkLoginStatus();
-    // }, [Navigation]);
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>

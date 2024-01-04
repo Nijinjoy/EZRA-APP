@@ -7,6 +7,25 @@ import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+const data1 = [
+    {
+        id: 1,
+        name: 'Nijin',
+        background: colors.skyBlue
+    },
+    {
+        id: 2,
+        name: 'Nijo',
+        background: colors.titleColor
+    },
+    {
+        id: 3,
+        name: 'Ajo',
+        background: colors.violet
+    },
+]
+
+
 const ChildrenScreen = () => {
     const Navigation = useNavigation()
     const [childrenNames, setChildrenNames] = useState([]);
@@ -25,6 +44,7 @@ const ChildrenScreen = () => {
         fetchChildrenNames();
     }, []);
 
+
     const handleAddChild = async () => {
         try {
             const result = await Navigation.navigate('AddChildScreen', {
@@ -41,38 +61,42 @@ const ChildrenScreen = () => {
         }
     };
 
+
+
     return (
-        <View style={{ flex: 1 }}>
-            <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
-                <View style={{ marginTop: HEIGHT * 0.04 }}>
-                    <HeaderComponent title="Children" backArrow={backArrow} navigation={() => Navigation.goBack()} fontsize={18} />
-                </View>
+        <View style={{ flex: 1, margin: HEIGHT * 0.01 }}>
+            <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1 }}>
+                <SafeAreaView style={{ marginTop: HEIGHT * 0.04 }}>
+                    <HeaderComponent title="Children" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                </SafeAreaView>
             </ImageBackground>
-            <View style={{ borderWidth: 0 }}>
-                <View style={{ marginHorizontal: WIDTH * 0.05, flexDirection: "row" }}>
-                    <FlatList
-                        style={{ flexGrow: 0.5 }}
-                        data={childrenNames}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <Pressable style={{ alignItems: 'center', borderWidth: 0 }} onPress={() => Navigation.navigate('AddChildScreen', { title: 'Update Child', buttonText: 'Update' })}>
-                                <View style={{ width: WIDTH * 0.2, height: HEIGHT * 0.11, borderRadius: HEIGHT, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightGrey }} >
-                                    <Image source={profileIcon} resizeMode='contain' style={{ width: WIDTH * 0.08 }} />
+
+            <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.05 }}>
+                <FlatList
+                    // data={data1}
+                    data={childrenNames}
+                    numColumns={2}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <View style={{ margin: WIDTH * 0.04 }}>
+                            <Pressable style={{ flexDirection: 'row', width: WIDTH * 0.32, height: HEIGHT * 0.18, justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: item.background, borderRadius: WIDTH * 0.02 }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <Image source={contact} style={{ width: WIDTH * 0.2, height: HEIGHT * 0.08 }} resizeMode='contain' />
+                                    <Text style={{ textAlign: 'center', marginTop: HEIGHT * 0.01, color: colors.white }}>{item.name}</Text>
                                 </View>
-                                <Text style={{ fontSize: 18, color: colors.darkViolet, marginVertical: HEIGHT * 0.01 }}>{item}</Text>
-                            </Pressable >
-                        )}
-                    />
-                    <Pressable onPress={handleAddChild} style={{ width: WIDTH * 0.2, height: HEIGHT * 0.11, borderRadius: HEIGHT, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.skyBlue }}>
-                        <Text style={{ fontSize: 30 }} >+</Text >
-                    </Pressable>
-                </View>
+                            </Pressable>
+                        </View>
+                    )}
+                />
+                <Pressable onPress={handleAddChild} style={{ width: WIDTH * 0.32, height: HEIGHT * 0.18, backgroundColor: colors.grey, justifyContent: 'center', alignItems: 'center', marginHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.02 }}>
+                    <View style={{ padding: 5, borderRadius: WIDTH, width: WIDTH * 0.09, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.white }}>
+                        <Text style={{ fontSize: 25 }}>+</Text>
+                    </View>
+                </Pressable>
             </View>
-        </View>
+        </View >
     )
 }
-
-
 export default ChildrenScreen
 
 

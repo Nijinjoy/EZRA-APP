@@ -7,14 +7,14 @@ import { colors } from '../constants/Colors'
 const HeaderComponent = (props) => {
     const { title, backArrow, fontsize, navigation, Width, Height } = props
     return (
-        <View style={{ flexDirection: 'row', /* marginHorizontal: WIDTH * 0.05 */ height: HEIGHT * 0.06 }}>
-            <Pressable onPress={navigation} style={[{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }]}>
+        <View style={{ flexDirection: 'row', height: HEIGHT * 0.06 }}>
+            <Pressable onPress={navigation} style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
                 <Image source={backArrow} resizeMode='contain' style={{ width: Width, height: Height }} />
             </Pressable>
-            <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: fontsize, color: colors.titleColor, fontWeight: '500' }}>{title}</Text>
+            <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center', borderWidth: 0 }}>
+                <Text style={{ fontSize: fontsize, color: colors.titleColor, fontWeight: '500', textAlign: 'center' }}>{title}</Text>
             </View>
-            <Pressable style={{ flex: 0.15, justifyContent: 'center', alignItems: 'center' }}>
+            <Pressable style={{ flex: 0.15, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
                 <Text>{ }</Text>
             </Pressable>
         </View>
