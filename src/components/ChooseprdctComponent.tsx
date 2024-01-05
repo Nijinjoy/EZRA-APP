@@ -20,6 +20,11 @@ const PRODUCTS = [
         icon: shirt,
         value: "Shirt"
     },
+    {
+        id: 4,
+        icon: shirt,
+        value: "Shirt"
+    },
 ]
 
 const ChooseprdctComponent = () => {
@@ -35,6 +40,7 @@ const ChooseprdctComponent = () => {
                 data={PRODUCTS}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
+                showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
                     const isSelected = selectedItem === item.id;
                     return (
@@ -50,5 +56,6 @@ const ChooseprdctComponent = () => {
         </View >
     )
 }
+
 
 export default ChooseprdctComponent

@@ -25,7 +25,6 @@ const data1 = [
     },
 ]
 
-
 const ChildrenScreen = () => {
     const Navigation = useNavigation()
     const [childrenNames, setChildrenNames] = useState([]);
@@ -60,8 +59,6 @@ const ChildrenScreen = () => {
             console.error('Error navigating to AddChildScreen:', error);
         }
     };
-
-
 
     return (
         <View style={{ flex: 1, margin: HEIGHT * 0.01 }}>

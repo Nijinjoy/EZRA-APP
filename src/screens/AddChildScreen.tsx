@@ -28,7 +28,6 @@ const AddChildScreen = () => {
         setDatePickerVisibility(false);
     };
 
-
     useEffect(() => {
         if (isNewChild) {
             setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
@@ -61,56 +60,24 @@ const AddChildScreen = () => {
         }));
     };
 
-    // const handleAddChild = async () => {
-    //     try {
-    //         await AsyncStorage.setItem('childName', childInfo.name);
-    //         await AsyncStorage.setItem('childGender', childInfo.gender);
-    //         await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
-
-    //         Navigation.navigate('HomeScreen', { childInfo: childInfo.name })
-
-    //         if (route.params?.isNewChild) {
-    //             setChildInfo({ name: '', gender: 'Male', dateOfBirth: ' ' });
-    //         }
-    //     } catch (error) {
-    //         console.error("Error storing child information:", error);
-    //         Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
-    //     }
-    // };
-
     const handleAddChild = async () => {
         try {
-            const apiEndpoint = 'https://hbkuesra.herokuapp.com/api/child/addChild';
-            const apiData = {
-                name: childInfo.name,
-                gender: childInfo.gender,
-                dateOfBirth: childInfo.dateOfBirth,
-            };
-            const response = await fetch(apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(apiData),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add child');
-            }
             await AsyncStorage.setItem('childName', childInfo.name);
             await AsyncStorage.setItem('childGender', childInfo.gender);
             await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
 
             Navigation.navigate('HomeScreen', { childInfo: childInfo.name })
+
             if (route.params?.isNewChild) {
-                setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
+                setChildInfo({ name: '', gender: 'Male', dateOfBirth: ' ' });
             }
         }
         catch (error) {
-            console.error('Error adding child:', error);
+            console.error("Error storing child information:", error);
             Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+            Alert.alert('')
         }
-    }
-
+    };
 
     return (
         <View style={{ flex: 1 }}>

@@ -5,6 +5,7 @@ import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import HeaderComponent from '../components/HeaderComponent'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const data1 = [
     {
@@ -19,15 +20,18 @@ const data1 = [
         id: 3,
         name: 'shijo'
     },
+    // {
+    //     id: 3,
+    //     name: 'shijo'
+    // },
+    // {
+    //     id: 3,
+    //     name: 'shijo'
+    // },
 ]
 
 const ExploreScreen = () => {
     const Navigation = useNavigation()
-
-    // const navigate = () => {
-    //     Navigation.navigate('HomeScreen');
-    // }
-
     return (
         <View style={{ flex: 1, margin: 5 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1, }}>

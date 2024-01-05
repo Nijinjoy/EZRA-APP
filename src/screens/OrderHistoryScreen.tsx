@@ -1,10 +1,11 @@
-import { View, Text, SafeAreaView, ImageBackground, SectionList, Pressable, Image, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, SectionList, Pressable, Image, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { backArrow, cup, keyChain, shadedIcon } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const OrderHistoryScreen = () => {
@@ -29,6 +30,7 @@ const OrderHistoryScreen = () => {
             path: 'OrderDetailsScreen'
         }
     ]
+
     const OrderHistory2 = [
         {
             id: 1,
@@ -74,6 +76,35 @@ const OrderHistoryScreen = () => {
             data: OrderHistory2
         }
     ]
+
+    // const orderDetails = async () => {
+    //     if (validateInputs) {
+    //         try {
+    //             const response = await fetch('https://hbkuesra.herokuapp.com/api/user/login', {
+    //                 method: "POST",
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({
+    //                     email: OrderHistory1.email,
+    //                     password: OrderHistory2.password
+    //                 })
+    //             })
+    //             if (response.ok) {
+    //                 const result = await response.json()
+    //                 await AsyncStorage.setItem('usertoken', result.token)
+    //                 Navigation.navigate('HomeScreen')
+    //             } else {
+    //                 const errorData = await response.json();
+    //                 Alert.alert('Error', errorData.message || 'Invalid credentials. Please try again.');
+    //             }
+    //         }
+    //         catch (error) {
+    //             console.log('error during sign-in', error);
+    //             Alert.alert('Error', 'An unexpected error occured')
+    //         }
+    //     }
+    // }
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white }}>

@@ -20,7 +20,6 @@ const SignInScreen = () => {
             [field]: value,
         });
     };
-
     const validateInputs = () => {
         const errors = {};
         if (!formData.email) {
@@ -38,6 +37,7 @@ const SignInScreen = () => {
         return Object.keys(errors).length === 0;
     };
 
+
     const handleSignIn = async () => {
         if (validateInputs) {
             try {
@@ -51,7 +51,6 @@ const SignInScreen = () => {
                         password: formData.password,
                     }),
                 });
-
                 if (response.ok) {
                     const result = await response.json();
                     await AsyncStorage.setItem('userToken', result.token);
@@ -66,7 +65,6 @@ const SignInScreen = () => {
             }
         }
     };
-
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.violet }}>
@@ -121,3 +119,4 @@ const SignInScreen = () => {
 }
 
 export default SignInScreen
+

@@ -28,7 +28,8 @@ const DATA = [
         id: 3,
         title: 'Artworks',
         icon: drawingsIcon,
-        arrow: drawerArrow
+        arrow: drawerArrow,
+        path: 'DrawingsScreen'
     },
     {
         id: 4,
@@ -66,9 +67,10 @@ const DrawerScreen = () => {
     const { childName } = route.params || {};
 
     const onLogout = async () => {
-        await AsyncStorage.removeItem('userToken');
-        Navigation.navigate('SignInScreen');
-    };
+        await AsyncStorage.removeItem('userToken')
+        Navigation.navigate('SignInScreen')
+    }
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -78,7 +80,7 @@ const DrawerScreen = () => {
                     <Text style={{ fontSize: 13, color: colors.lightGrey }}>aaliya@gmail.com</Text>
                 </View>
             </ImageBackground>
-            <ScrollView >
+            <ScrollView>
                 <FlatList
                     data={DATA}
                     keyExtractor={(item) => item.id.toString()}
@@ -99,19 +101,20 @@ const DrawerScreen = () => {
                                 {index < DATA.length - 1 && (
                                     <View
                                         key={`separator-${index}`}
-                                        style={{ backgroundColor: colors.grey, marginHorizontal: HEIGHT * 0.025, borderWidth: 0.15 }}
+                                        style={{ backgroundColor: colors.grey, marginHorizontal: HEIGHT * 0.025, borderWidth: 0 }}
                                     />
                                 )}
                             </React.Fragment>
                         )
                     }}
                 />
-                <LanguageComponent />
-                <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.22, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.08, marginVertical: HEIGHT * 0.04 }} onPress={onLogout} >
-                    <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
-                </Pressable>
+                <View style={{ marginHorizontal: WIDTH * 0.01 }}>
+                    <LanguageComponent />
+                    <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.34, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.07, marginVertical: HEIGHT * 0.04 }} onPress={onLogout} >
+                        <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
+                    </Pressable>
+                </View>
             </ScrollView>
-
         </View >
     )
 }

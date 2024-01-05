@@ -57,7 +57,6 @@ const SignUpScreen = () => {
         return password.length >= 6;
     };
 
-
     return (
         <ScrollView style={{ flex: 1 }}>
             <Image source={signinIntersection} style={{ width: WIDTH, height: HEIGHT * 0.296 }} resizeMode="contain" />

@@ -4,10 +4,10 @@ import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { eye } from '../assets/images';
 import { colors } from '../constants/Colors';
 
-const TextInputComponent = ({ icon, width, placeholder, passwordBackground, onChangeText, value, background, onPress, isTextEnabled = true }) => {
+const TextInputComponent = ({ icon, width, placeholder, passwordBackground, onChangeText, Height, value, background, onPress, isTextEnabled = true }) => {
 
     return (
-        <Pressable onPress={onPress} style={{ borderWidth: 1, height: HEIGHT * 0.06, borderRadius: WIDTH * 0.015, flexDirection: 'row', width: width, alignItems: 'center', justifyContent: 'center', backgroundColor: background, borderColor: colors.grey }}>
+        <Pressable onPress={onPress} style={{ borderWidth: 1,/*  height: HEIGHT * 0.07, */ borderRadius: WIDTH * 0.015, flexDirection: 'row', width: width, alignItems: 'center', justifyContent: 'center', backgroundColor: background, borderColor: colors.grey, height: Height }}>
             <TextInput
                 value={value}
                 placeholder={placeholder}

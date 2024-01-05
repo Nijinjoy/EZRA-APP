@@ -8,6 +8,7 @@ import { colors } from '../constants/Colors'
 import { useNavigation } from '@react-navigation/native'
 import ImageComponent from '../components/ImageComponent'
 import ButtonComponent from '../components/ButtonComponent'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const ContactScreen = () => {
     const Navigation = useNavigation()
@@ -17,10 +18,9 @@ const ContactScreen = () => {
         setContact((prevContacts) => ({ ...prevContacts, image: [selectedImageUri] }));
     };
 
-
     const formFields = [
         { label: 'Select child', stateKey: 'childname', component: <TextInputComponent placeholder="Choose from list" /> },
-        { label: 'Question', stateKey: 'message', component: <TextInputComponent placeholder="Ask a question" /> },
+        { label: 'Question', stateKey: 'message', component: <TextInputComponent placeholder="Ask a question" Height={HEIGHT * 0.12} /> },
         { label: 'Upload image', stateKey: 'image', component: <ImageComponent /> },
         { label: 'Phone number', stateKey: 'phone', component: <TextInputComponent placeholder="Enter phone number" /> },
         { label: 'Email', stateKey: 'email', component: <TextInputComponent placeholder="Enter email" /> },

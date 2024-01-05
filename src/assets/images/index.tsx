@@ -34,6 +34,7 @@ import english from '../images/english/english.png'
 import arabic from '../images/arabic/arabic.png'
 import cupp from '../images/cupp/cupp.png'
 import shirt from '../images/shirt/shirt.png'
+import artwork from '../images/artwork/artwork.png'
 
 
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork }

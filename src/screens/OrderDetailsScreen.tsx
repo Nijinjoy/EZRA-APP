@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, SafeAreaView, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { colors } from '../constants/Colors'
 import HeaderComponent from '../components/HeaderComponent'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 
 const OrderDetailsScreen = () => {
     const Navigation = useNavigation()
+    const [color, setColor] = useState([])
 
     return (
         <View style={{ flex: 1, borderWidth: 0, backgroundColor: colors.white }}>

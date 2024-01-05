@@ -6,11 +6,14 @@ import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import { DrawerActions, useNavigation, useRoute } from '@react-navigation/native'
 import LanguagComponent from '../components/LanguagComponent'
+import ModalComponent from '../components/ModalComponent'
+import LogoutModalComponent from '../components/LogoutModalComponent'
 
 const HomeScreen = ({ }) => {
     const route = useRoute()
     const Navigation = useNavigation()
     const { childInfo } = route.params || {};
+
 
     return (
         <View style={{ borderWidth: 0.5, borderColor: colors.lightBlue }}>
@@ -21,6 +24,9 @@ const HomeScreen = ({ }) => {
             </ImageBackground>
             <Pressable style={{ marginHorizontal: WIDTH * 0.05 }}>
                 <Text style={{ fontSize: 13, color: colors.lightGrey, fontWeight: "600" }}>Children's profiles </Text>
+
+                <LogoutModalComponent />
+
                 <View style={{ borderWidth: 0, width: WIDTH * 0.9, height: HEIGHT * 0.190, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.grey, marginVertical: HEIGHT * 0.05, borderRadius: WIDTH * 0.02 }}>
                     <Text style={{
                         fontSize: 12, color: colors.darkViolet, width: WIDTH * 0.4, textAlign: 'center', margin: HEIGHT * 0.01
