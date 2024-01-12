@@ -1,6 +1,6 @@
 import { View, Text, ImageBackground, FlatList, Pressable, Image, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
-import { drawerArrow, drawerProfile, drawerShade, drawingsIcon, evaluateIcon, faq } from '../assets/images'
+import { call, drawerArrow, drawerProfile, drawerShade, drawingsIcon, evaluateIcon, faq, history } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { colors } from '../constants/Colors';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -19,7 +19,7 @@ const DATA = [
     },
     {
         id: 2,
-        title: 'Explore',
+        title: 'Evaluate',
         icon: evaluateIcon,
         arrow: drawerArrow,
         path: 'ExploreScreen'
@@ -41,21 +41,21 @@ const DATA = [
     {
         id: 5,
         title: 'Contact an art therapist',
-        icon: faq,
+        icon: call,
         arrow: drawerArrow,
         path: ' ContactScreen'
     },
     {
         id: 6,
-        title: 'Wear your emotions',
+        title: 'Order product',
         icon: evaluateIcon,
         arrow: drawerArrow,
-        path: 'WearEmotionScreen'
+        path: 'ProductOrderScreen'
     },
     {
         id: 7,
         title: 'Order History',
-        icon: faq,
+        icon: history,
         arrow: drawerArrow,
         path: 'OrderHistoryScreen'
     }
@@ -67,10 +67,8 @@ const DrawerScreen = () => {
     const { childName } = route.params || {};
 
     const onLogout = async () => {
-        await AsyncStorage.removeItem('userToken')
         Navigation.navigate('SignInScreen')
     }
-
 
     return (
         <View style={{ flex: 1 }}>
@@ -87,7 +85,7 @@ const DrawerScreen = () => {
                     renderItem={({ item, index }) => {
                         return (
                             <React.Fragment>
-                                <Pressable onPress={() => Navigation.navigate(item.path)} style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center', padding: HEIGHT * 0.025, borderWidth: 0 }}>
+                                <Pressable onPress={() => Navigation.navigate(item.path)} style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center', padding: HEIGHT * 0.025 }}>
                                     <View style={{ flex: 0.14 }}>
                                         <Image source={item.icon} style={{ width: WIDTH * 0.055, height: HEIGHT * 0.03 }} />
                                     </View>
@@ -110,7 +108,7 @@ const DrawerScreen = () => {
                 />
                 <View style={{ marginHorizontal: WIDTH * 0.01 }}>
                     <LanguageComponent />
-                    <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.34, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.07, marginVertical: HEIGHT * 0.04 }} onPress={onLogout} >
+                    <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.34, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.07, marginVertical: HEIGHT * 0.04 }} onPress={onLogout}>
                         <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
                     </Pressable>
                 </View>

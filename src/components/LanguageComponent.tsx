@@ -11,12 +11,11 @@ const LanguageComponent = () => {
                 <Image source={english} style={{ width: WIDTH * 0.06, height: HEIGHT * 0.03 }} resizeMode='contain' />
                 <Text style={{ fontWeight: "500", marginHorizontal: WIDTH * 0.01 }}>EN</Text>
             </Pressable>
-            <Pressable style={{ flexDirection: "row", /* backgroundColor: colors.shadowWhite, */ padding: WIDTH * 0.01, marginHorizontal: WIDTH * 0.01 }}>
+            <Pressable style={{ flexDirection: "row", padding: WIDTH * 0.01, marginHorizontal: WIDTH * 0.01 }} >
                 <Image source={arabic} style={{ width: WIDTH * 0.06, height: HEIGHT * 0.03 }} resizeMode='contain' />
                 <Text style={{ fontWeight: '500', marginHorizontal: WIDTH * 0.01, }}>AR</Text>
             </Pressable>
         </View>
     )
 }
-
 export default LanguageComponent

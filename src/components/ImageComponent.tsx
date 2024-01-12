@@ -10,20 +10,20 @@ const ImageComponent = ({ onSelectImage }) => {
     const onSelect = () => {
         const options = {
             mediaType: 'photo',
-            includeBase64: false
+            includeBase64: false,
         };
         launchImageLibrary(options, (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
-                console.log('Image picker error: ', response.error);
+                console.log('Image picker error:', response.error);
             } else {
                 let imageUri = response.uri || response.assets?.[0]?.uri;
                 setSelectedImage(imageUri);
-                console.log("imageResponse==>", selectedImage);
             }
         });
     };
+
 
     return (
         <View style={{ borderWidth: 1, borderColor: colors.grey, flexDirection: 'row', borderRadius: WIDTH * 0.02, overflow: 'hidden' }}>

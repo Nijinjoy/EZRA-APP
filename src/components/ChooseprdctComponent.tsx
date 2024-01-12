@@ -1,33 +1,12 @@
 import { View, Text, FlatList, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { cup, keyChain, shirt } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
+import axios from 'axios'
 
-const PRODUCTS = [
-    {
-        id: 1,
-        icon: cup,
-        value: "Cup"
-    },
-    {
-        id: 2,
-        icon: keyChain,
-        value: "KeyChain"
-    },
-    {
-        id: 3,
-        icon: shirt,
-        value: "Shirt"
-    },
-    {
-        id: 4,
-        icon: shirt,
-        value: "Shirt"
-    },
-]
 
-const ChooseprdctComponent = () => {
+const ChooseprdctComponent = ({ productList }) => {
     const [selectedItem, setSelectedItem] = useState(null);
 
     const handlePress = (itemId) => {
@@ -37,17 +16,20 @@ const ChooseprdctComponent = () => {
     return (
         <View style={{ borderRadius: HEIGHT * 0.01 }}>
             <FlatList
-                data={PRODUCTS}
-                keyExtractor={(item) => item.id.toString()}
+                data={productList.data}
+                keyExtractor={(item) => item._id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => {
-                    const isSelected = selectedItem === item.id;
+                    const isSelected = selectedItem === item._id;
+                    const { image, title_en, price } = item;
                     return (
-                        <Pressable onPress={() => handlePress(item.id)} style={{ margin: WIDTH * 0.02, backgroundColor: isSelected ? colors.blue : colors.white, borderRadius: HEIGHT * 0.01, borderWidth: 0.5, borderColor: colors.lightGrey }}>
-                            <Image source={item.icon} style={{ width: WIDTH * 0.255, height: HEIGHT * 0.1, borderBottomLeftRadius: WIDTH * 0.01, borderBottomRightRadius: WIDTH * 0.01 }} />
+                        <Pressable onPress={() => handlePress(item._id)} style={{ margin: WIDTH * 0.01, borderRadius: HEIGHT * 0.01, borderWidth: 0.5, borderColor: colors.lightGrey, backgroundColor: isSelected ? colors.blue : colors.white }}>
+                            <Image source={{ uri: image }} style={{ width: WIDTH * 0.257, height: HEIGHT * 0.1, borderBottomLeftRadius: WIDTH * 0.01, borderBottomRightRadius: WIDTH * 0.01, margin: WIDTH * 0.008 }} resizeMode='cover' />
                             <View style={{ margin: HEIGHT * 0.01 }}>
-                                <Text style={{ textAlign: 'center', fontSize: 13, color: isSelected ? colors.white : colors.violet, fontWeight: '500' }}>{item.value}</Text>
+                                <Text style={{ textAlign: 'center', fontSize: 13, color: isSelected ? colors.white : colors.violet, fontWeight: '500' }}>
+                                    {title_en}
+                                </Text>
                             </View>
                         </Pressable>
                     )
@@ -56,6 +38,5 @@ const ChooseprdctComponent = () => {
         </View >
     )
 }
-
 
 export default ChooseprdctComponent

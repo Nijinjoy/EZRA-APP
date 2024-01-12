@@ -27,7 +27,6 @@ const SplashScreen = () => {
         checkUserSignedUp();
     }, []);
 
-
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>
             <View style={{ width: WIDTH * 0.432, height: HEIGHT * 0.242, backgroundColor: colors.shadowWhite, borderRadius: WIDTH * 0.087, justifyContent: "center", alignItems: "center" }}>
@@ -44,5 +43,6 @@ const SplashScreen = () => {
         </View>
     )
 }
+
 
 export default SplashScreen

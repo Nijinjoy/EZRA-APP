@@ -1,14 +1,34 @@
 import { View, Text, ImageBackground, SafeAreaView, Image, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { colors } from '../constants/Colors'
 import HeaderComponent from '../components/HeaderComponent'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { backArrow, cupp, shadedIcon } from '../assets/images'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 
 const OrderDetailsScreen = () => {
     const Navigation = useNavigation()
-    const [color, setColor] = useState([])
+    const [productlist, setProductlist] = useState([]);
+
+    useEffect(() => {
+        const apiUrl = 'https://esra-dev.applab.qa/api/products';
+        const headers = {
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmQ1NWYzMDZmMzA0MzAwNzQxMmQ5M2MiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjc2NTMwNjk3fQ.8ZUDKzZ9Lfx8_23JC2yPzYFUGwRmIOBG_L0ZZxcexrk`,
+            'Content-Type': 'application/json',
+        };
+        axios.get(apiUrl, { headers })
+            .then(response => {
+                if (!response.data.status) {
+                    throw new Error(`API error! Message: ${response.data.message}`);
+                }
+                setProductlist(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
+
 
     return (
         <View style={{ flex: 1, borderWidth: 0, backgroundColor: colors.white }}>
@@ -17,19 +37,17 @@ const OrderDetailsScreen = () => {
                     <HeaderComponent title="Order Details" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <View style={{ borderWidth: 0 }}>
+            <View style={{ borderWidth: 1 }}>
                 <Image source={cupp} style={{ width: WIDTH * 0.85, height: HEIGHT * 0.17, alignSelf: 'center' }} resizeMode='cover' />
                 <View style={{ marginHorizontal: WIDTH * 0.07 }}>
                     <Text style={{ fontSize: 13, color: colors.grey, marginTop: HEIGHT * 0.03 }}>12 March 2021</Text>
                     <Text style={{ fontSize: 18, color: colors.darkViolet }}>Custom cup print</Text>
-
-                    <View style={{ flexDirection: 'row', }}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Text style={{ fontSize: 17, color: colors.blue, marginTop: HEIGHT * 0.03 }}>Order Details</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                             <View style={{ height: 1, marginTop: 20, marginHorizontal: 10, borderWidth: 0.5, width: WIDTH * 0.6, borderColor: colors.grey }} />
                         </View>
                     </View>
-
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginTop: HEIGHT * 0.03 }}>Order ID #5445</Text>
                     <View style={{ flexDirection: "row", borderWidth: 0, marginVertical: HEIGHT * 0.02 }}>
                         <View style={{ flex: 0.7 }}>

@@ -20,14 +20,10 @@ const data1 = [
         id: 3,
         name: 'shijo'
     },
-    // {
-    //     id: 3,
-    //     name: 'shijo'
-    // },
-    // {
-    //     id: 3,
-    //     name: 'shijo'
-    // },
+    {
+        id: 4,
+        name: 'shijo'
+    }
 ]
 
 const ExploreScreen = () => {
@@ -64,6 +60,7 @@ const ExploreScreen = () => {
                         )
                     }}
                 />
+
             </View>
         </View >
     )

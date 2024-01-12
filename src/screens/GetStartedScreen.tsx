@@ -37,12 +37,24 @@ const GetStartedScreen = () => {
                 <Text style={{ fontSize: 24, color: colors.violet, marginTop: HEIGHT * 0.02 }}>The Emotion Sensing</Text>
                 <Text style={{ fontSize: 24, color: colors.violet }}>Recognition Application</Text>
                 <View style={{ marginVertical: HEIGHT * 0.03 }}>
-                    <ButtonComponent background={colors.darkViolet} text="Get Started" textColor={colors.white} nextarrow={nextArrow} navigate={() => Navigation.navigate('SignUpScreen')} />
+                    <ButtonComponent
+                        background={colors.darkViolet}
+                        text="Get Started"
+                        textColor={colors.white}
+                        Width={WIDTH * 0.9}
+                        nextarrow={nextArrow}
+                        navigate={() => Navigation.navigate('SignUpScreen')}
+                    />
                 </View>
                 <View style={{}}>
-                    <ButtonComponent background={colors.white} textColor={colors.violet} text="Sign in" navigate={() => Navigation.navigate('SignInScreen')} />
+                    <ButtonComponent
+                        background={colors.white}
+                        textColor={colors.violet}
+                        Width={WIDTH * 0.9}
+                        text="Sign in"
+                        navigate={() => Navigation.navigate('SignInScreen')}
+                    />
                 </View>
-
             </View>
             <View style={{ bottom: HEIGHT * -0.048, position: "absolute" }}>
                 <Image source={bottomIntersection} style={{ width: WIDTH, height: HEIGHT * 0.128 }} resizeMode='contain' />

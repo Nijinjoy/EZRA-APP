@@ -66,16 +66,14 @@ const AddChildScreen = () => {
             await AsyncStorage.setItem('childGender', childInfo.gender);
             await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
 
-            Navigation.navigate('HomeScreen', { childInfo: childInfo.name })
-
+            Navigation.navigate('HomeScreen', { childName: childInfo.name })
             if (route.params?.isNewChild) {
-                setChildInfo({ name: '', gender: 'Male', dateOfBirth: ' ' });
+                setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
             }
         }
         catch (error) {
             console.error("Error storing child information:", error);
-            Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
-            Alert.alert('')
+            Alert.alert('Error', 'An unexpected error occurred.');
         }
     };
 
@@ -86,7 +84,7 @@ const AddChildScreen = () => {
                     <HeaderComponent title={title || "Add a Child"} backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <View style={{ marginHorizontal: WIDTH * 0.07 }}>
+            <View style={{ marginHorizontal: WIDTH * 0.05, }}>
                 <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.darkViolet, }}>Now let's get to know your child more</Text>
                 <View style={{ marginTop: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Name</Text>
@@ -126,18 +124,21 @@ const AddChildScreen = () => {
                         onCancel={hideDatePicker}
                     />
                 </View>
-                <ButtonComponent
-                    background={colors.darkViolet}
-                    text={buttonText || "Add a child"}
-                    nextarrow={nextArrow}
-                    textColor={colors.white}
-                    Bottom={HEIGHT * 0.26}
-                    width={WIDTH * 0.85}
-                    navigate={handleAddChild}
-                />
+                <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: WIDTH * 0.05 }}>
+                    <ButtonComponent
+                        background={colors.darkViolet}
+                        text={buttonText || "Add a child"}
+                        nextarrow={nextArrow}
+                        textColor={colors.white}
+                        Bottom={HEIGHT * 0.26}
+                        // width={WIDTH * 0.85}
+                        navigate={handleAddChild}
+                    />
+                </View>
             </View>
         </View>
     )
 }
+
 export default AddChildScreen
 

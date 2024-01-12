@@ -11,7 +11,8 @@ const colors = {
     titleColor: "#253B65",
     skyBlue: "#64A2FF",
     lightBlue: "#EFF3F8",
-    blue: "#0088CE"
+    blue: "#0088CE",
+    orange: "#F19054"
 }
 
 export { colors }

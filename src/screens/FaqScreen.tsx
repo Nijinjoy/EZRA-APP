@@ -11,9 +11,9 @@ import { colors } from '../constants/Colors'
 
 const FaqScreen = () => {
     const Navigation = useNavigation()
-    const [faqData, setFaqData] = useState([]);
     const [selectedQuestion, setSelectedQuestion] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
+    const [faqData, setFaqData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,7 +66,6 @@ const FaqScreen = () => {
                     }}
                 />
             </View>
-
         </View >
     )
 }

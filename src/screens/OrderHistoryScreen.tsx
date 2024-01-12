@@ -77,34 +77,6 @@ const OrderHistoryScreen = () => {
         }
     ]
 
-    // const orderDetails = async () => {
-    //     if (validateInputs) {
-    //         try {
-    //             const response = await fetch('https://hbkuesra.herokuapp.com/api/user/login', {
-    //                 method: "POST",
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                 },
-    //                 body: JSON.stringify({
-    //                     email: OrderHistory1.email,
-    //                     password: OrderHistory2.password
-    //                 })
-    //             })
-    //             if (response.ok) {
-    //                 const result = await response.json()
-    //                 await AsyncStorage.setItem('usertoken', result.token)
-    //                 Navigation.navigate('HomeScreen')
-    //             } else {
-    //                 const errorData = await response.json();
-    //                 Alert.alert('Error', errorData.message || 'Invalid credentials. Please try again.');
-    //             }
-    //         }
-    //         catch (error) {
-    //             console.log('error during sign-in', error);
-    //             Alert.alert('Error', 'An unexpected error occured')
-    //         }
-    //     }
-    // }
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white }}>
@@ -113,6 +85,7 @@ const OrderHistoryScreen = () => {
                     <HeaderComponent title="Order History" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
+
             <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }}>
                 <SectionList
                     sections={OrderHistory}
@@ -136,7 +109,7 @@ const OrderHistoryScreen = () => {
                     )}
                 />
             </ScrollView>
-        </View >
+        </View>
     )
 }
 

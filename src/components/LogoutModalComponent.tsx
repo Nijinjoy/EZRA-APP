@@ -13,9 +13,9 @@ const LogoutModalComponent = () => {
                     <Text style={{ color: colors.lightGrey, marginTop: HEIGHT * 0.02, fontSize: 13 }}>Are you sure want to logout</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: HEIGHT * 0.04 }}>
-                    <PressbtnComponent />
+                    <PressbtnComponent title="Feedback" />
                     <View style={{ marginHorizontal: WIDTH * 0.03 }}>
-                        <PressbtnComponent />
+                        <PressbtnComponent title="Submit" />
                     </View>
                 </View>
             </View>

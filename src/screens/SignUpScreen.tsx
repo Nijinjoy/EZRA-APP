@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Alert, ScrollView } from 'react-native'
+import { View, Text, Image, Pressable, Alert, ScrollView, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { eye, nextArrow, signinIntersection } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
@@ -8,54 +8,71 @@ import ButtonComponent from '../components/ButtonComponent'
 import { useNavigation } from '@react-navigation/native'
 import PasswordComponent from '../components/PasswordComponent'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Api } from './Api'
+import TextInputs from '../components/TextInputs'
+
+const Data = [
+    {
+        id: 1,
+        placeholder: "Email address",
+        key: "Email"
+    },
+    {
+        id: 2,
+        placeholder: "Password",
+        img: eye,
+        key: "Password",
+        secureTextEntry: true,
+        togglePassword: true
+    },
+    {
+        id: 3,
+        placeholder: "Repeat password",
+        key: "repeatPassword",
+        secureTextEntry: true,
+        togglePassword: false
+    }
+]
 
 const SignUpScreen = () => {
     const Navigation = useNavigation()
-    const [formData, setFormData] = useState({ email: '', password: '', repeatPassword: '', })
+    const [error, setError] = useState("");
+    const [formData, setFormData] = useState({ Email: "", Password: "" })
 
-    const handleInputChange = (field, value) => {
-        setFormData({
-            ...formData,
-            [field]: value
-        })
+    const handleState = (key, val) => {
+        error[key] = ""
+        setError(error)
+        formData[key] = val;
+        setFormData({ ...formData })
     }
 
-    const handleSignUp = async () => {
-        if (!isValidEmail(formData.email) || !isValidPassword(formData.password)) {
-            Alert.alert('Invalid Input', 'Please enter a valid email and password.');
-            return;
-        }
+    const onRegister = async () => {
+        const { Email, Password } = formData;
         try {
-            await AsyncStorage.setItem('email', formData.email);
-            const response = await fetch('https://hbkuesra.herokuapp.com/api/user/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            const response = await fetch(`${Api}/user/register`, {
+                method: "POST",
                 body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
+                    email: Email,
+                    password: Password,
                 }),
+                headers: {
+                    "Content-Type": "application/json",
+                }
             });
+            const data = await response.text();
             if (response.ok) {
-                Alert.alert('Registration successful')
-                Navigation.navigate('AddChildScreen');
+                await AsyncStorage.setItem('email', Email);
+                await AsyncStorage.setItem('password', Password);
+                console.log("User registered ==>", data);
+                Navigation.navigate('HomeScreen');
             } else {
-                const errorData = await response.json();
-                console.error('Registration failed:', errorData);
-                Alert.alert('Registration Failed', 'Please check your registration details and try again.');
+                console.log("Registration failed:", data);
             }
         } catch (error) {
-            console.error('Error:', error);
-            Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+            console.log("Error:", error);
         }
     };
-    const isValidEmail = (email) => {
-        return /\S+@\S+\.\S+/.test(email);
-    };
-    const isValidPassword = (password) => {
-        return password.length >= 6;
-    };
+
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -63,52 +80,34 @@ const SignUpScreen = () => {
             <View style={{ marginHorizontal: WIDTH * 0.07 }}>
                 <Text style={{ fontSize: 24, color: colors.darkViolet }}>Get Started</Text>
                 <Text style={{ color: colors.lightGrey, fontSize: 15, marginVertical: HEIGHT * 0.007 }}>Create an account</Text>
-                <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                    <View style={{ marginTop: HEIGHT * 0.02 }}>
-                        <Text style={{ fontSize: 13, color: colors.darkViolet, marginVertical: HEIGHT * 0.01 }}>Email</Text>
-                        <TextInputComponent
-                            placeholder="Email"
-                            background={colors.grey}
-                            width={WIDTH * 0.85}
-                            value={formData.email}
-                            onChangeText={(text) => handleInputChange('email', text)}
-                        />
-                    </View>
-                    <View style={{ marginTop: HEIGHT * 0.02 }}>
-                        <Text style={{ fontSize: 13, color: colors.darkViolet, marginVertical: HEIGHT * 0.01 }}>Password</Text>
-                        <PasswordComponent
-                            placeholder="Password"
-                            variable="show"
-                            secureTextEntry
-                            icon={eye}
-                            passwordBackground={colors.white}
-                            background={colors.grey}
-                            value={formData.password}
-                            onChangeText={(text) => handleInputChange('password', text)}
-                        />
-                    </View>
-                    <View style={{ marginTop: HEIGHT * 0.02 }}>
-                        <Text style={{ fontSize: 13, color: colors.darkViolet, marginVertical: HEIGHT * 0.01 }}>Repeat Password</Text>
-                        <PasswordComponent
-                            secureTextEntry
-                            placeholder="Repeat password"
-                            background={colors.grey}
-                            value={formData.repeatPassword}
-                            onChangeText={(text) => handleInputChange('repeatPassword', text)}
-                        />
-                    </View>
+                <View style={{ justifyContent: "center", alignItems: 'center', marginTop: HEIGHT * 0.03 }}>
+                    <FlatList
+                        data={Data}
+                        scrollEnabled={false}
+                        renderItem={({ item }) =>
+                            <TextInputs
+                                {...item}
+                                secureTextEntry={item?.secureTextEntry}
+                                viewStyle={{ height: HEIGHT * 0.07, borderWidth: 1, borderColor: colors.grey, justifyContent: "center", borderRadius: WIDTH * 0.015 }}
+                                errorMsg={error[item.key]}
+                                onChangeText={val => {
+                                    handleState(item.key, val);
+                                }}
+                            />
+                        }
+                        keyExtractor={item => item.id} />
                     <View style={{ marginTop: HEIGHT * 0.05 }}>
                         <ButtonComponent
                             text="Sign up"
-                            borderRadius={HEIGHT * 0.05}
+                            borderRadius={HEIGHT * 0.01}
                             background={colors.darkViolet}
                             textColor={colors.white}
                             nextarrow={nextArrow}
-                            navigate={handleSignUp}
+                            navigate={onRegister}
                         />
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }} >
                             <Text style={{ fontSize: 14, color: colors.lightGrey }}>Already have an account.</Text>
-                            <Pressable onPress={() => Navigation.navigate('AddChildScreen')}>
+                            <Pressable onPress={() => Navigation.navigate('HomeScreen')}>
                                 <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign in</Text>
                             </Pressable>
                         </View>
@@ -118,6 +117,4 @@ const SignUpScreen = () => {
         </ScrollView>
     )
 }
-
-
 export default SignUpScreen

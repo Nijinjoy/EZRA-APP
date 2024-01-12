@@ -35,6 +35,11 @@ import arabic from '../images/arabic/arabic.png'
 import cupp from '../images/cupp/cupp.png'
 import shirt from '../images/shirt/shirt.png'
 import artwork from '../images/artwork/artwork.png'
+import camera from '../images/camera/camera.png'
+import gallery from '../images/gallery/gallery.png'
+import draw1 from '../images/draw1/draw1.png'
+import toggle2 from '../images/toggle2/toggle2.png'
+import call from '../images/call/call.png'
+import history from '../images/history/history.png'
 
-
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history }

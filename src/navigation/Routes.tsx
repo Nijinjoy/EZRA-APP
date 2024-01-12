@@ -19,6 +19,7 @@ import ExploreScreen from '../screens/ExploreScreen';
 import OrderDetailsScreen from '../screens/OrderDetailsScreen';
 import WearEmotionScreen from '../screens/WearEmotionScreen';
 import DrawingsScreen from '../screens/DrawingsScreen';
+import ProductOrderScreen from '../screens/ProductOrderScreen';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -50,12 +51,12 @@ const Routes = () => {
                 <Stack.Screen name=' ContactScreen' component={ContactScreen} />
                 <Stack.Screen name='OrderHistoryScreen' component={OrderHistoryScreen} />
                 <Stack.Screen name='OrderDetailsScreen' component={OrderDetailsScreen} />
-                <Stack.Screen name='WearEmotionScreen' component={WearEmotionScreen} />
+                {/* <Stack.Screen name='WearEmotionScreen' component={WearEmotionScreen} /> */}
                 <Stack.Screen name='DrawingsScreen' component={DrawingsScreen} />
+                <Stack.Screen name='ProductOrderScreen' component={ProductOrderScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
-
 
 export default Routes   
