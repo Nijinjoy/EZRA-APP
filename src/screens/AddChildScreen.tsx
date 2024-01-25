@@ -11,21 +11,21 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import GenderComponent from '../components/GenderComponent';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Api } from './Api';
 
 const AddChildScreen = () => {
     const route = useRoute();
     const { title, buttonText, isNewChild } = route.params || {};
     const Navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dateOfBirth: '' });
+    const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dateOfBirth: '' })
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
 
     const hideDatePicker = () => {
-        setDatePickerVisibility(false);
+        setDatePickerVisibility(false)
     };
 
     useEffect(() => {
@@ -34,12 +34,15 @@ const AddChildScreen = () => {
         }
     }, [isNewChild]);
 
+
     const handleDatePicked = (pickedDate) => {
         hideDatePicker();
         const day = pickedDate.getDate().toString().padStart(2, '0');
         const month = (pickedDate.getMonth() + 1).toString().padStart(2, '0');
         const year = pickedDate.getFullYear();
         const formattedDate = `${day}/${month}/${year}`;
+
+
         setChildInfo(prevInfo => ({
             ...prevInfo,
             dateOfBirth: formattedDate
@@ -65,17 +68,18 @@ const AddChildScreen = () => {
             await AsyncStorage.setItem('childName', childInfo.name);
             await AsyncStorage.setItem('childGender', childInfo.gender);
             await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
-
-            Navigation.navigate('HomeScreen', { childName: childInfo.name })
+            Navigation.navigate('HomeScreen')
+            // Navigation.navigate('HomeScreen', { childName: childInfo.name });
             if (route.params?.isNewChild) {
-                setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
+                setChildInfo({ name: '', gender: 'Male', dateOfBirth: "" });
+                console.log("name==>", childInfo.gender);
             }
         }
         catch (error) {
             console.error("Error storing child information:", error);
             Alert.alert('Error', 'An unexpected error occurred.');
         }
-    };
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -84,8 +88,8 @@ const AddChildScreen = () => {
                     <HeaderComponent title={title || "Add a Child"} backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <View style={{ marginHorizontal: WIDTH * 0.05, }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.darkViolet, }}>Now let's get to know your child more</Text>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.darkViolet, marginHorizontal: WIDTH * 0.029 }}>Now let's get to know your child more</Text>
                 <View style={{ marginTop: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Name</Text>
                     <TextInputComponent
@@ -94,7 +98,7 @@ const AddChildScreen = () => {
                         onChangeText={handleNameChange}
                     />
                 </View>
-                <View style={{ alignSelf: 'flex-start', marginTop: HEIGHT * 0.02 }}>
+                <View style={{ alignSelf: 'flex-start', marginTop: HEIGHT * 0.02, marginHorizontal: WIDTH * 0.07 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet }}>Gender</Text>
                     <View style={{ flexDirection: 'row', marginTop: HEIGHT * 0.02 }}>
                         <Pressable onPress={() => handleGenderPress('Male')} style={{ borderWidth: 1, padding: HEIGHT * 0.01, borderRadius: WIDTH * 0.02, borderColor: colors.darkViolet, backgroundColor: childInfo.gender === 'Male' ? colors.darkViolet : colors.white }}>
@@ -126,12 +130,10 @@ const AddChildScreen = () => {
                 </View>
                 <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: WIDTH * 0.05 }}>
                     <ButtonComponent
-                        background={colors.darkViolet}
-                        text={buttonText || "Add a child"}
-                        nextarrow={nextArrow}
-                        textColor={colors.white}
-                        Bottom={HEIGHT * 0.26}
-                        // width={WIDTH * 0.85}
+                        containerStyle={{ backgroundColor: colors.white, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
+                        label="Add a child"
+                        icon={nextArrow}
+                        labelStyle={{ color: colors.white }}
                         navigate={handleAddChild}
                     />
                 </View>
@@ -141,4 +143,3 @@ const AddChildScreen = () => {
 }
 
 export default AddChildScreen
-

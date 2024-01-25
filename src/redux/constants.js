@@ -1,0 +1,4 @@
+const SET_TOKEN = "SET_TOKEN"
+const SET_PROFILE = "SET_PROFILE"
+
+export { SET_TOKEN, SET_PROFILE }

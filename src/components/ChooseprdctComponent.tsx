@@ -6,11 +6,12 @@ import { colors } from '../constants/Colors'
 import axios from 'axios'
 
 
-const ChooseprdctComponent = ({ productList }) => {
+const ChooseprdctComponent = ({ productList, onSelect }) => {
     const [selectedItem, setSelectedItem] = useState(null);
 
     const handlePress = (itemId) => {
         setSelectedItem(itemId);
+        onSelect(itemId);
     };
 
     return (

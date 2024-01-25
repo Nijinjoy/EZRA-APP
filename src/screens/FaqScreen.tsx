@@ -29,6 +29,7 @@ const FaqScreen = () => {
         fetchData();
     }, []);
 
+
     const handleQuestionPress = (id) => {
         setSelectedQuestion(selectedQuestion === id ? null : id);
     };
@@ -53,7 +54,7 @@ const FaqScreen = () => {
                                         <Text style={{ fontSize: 15, color: colors.titleColor, fontWeight: '500' }}>{item.title}</Text>
                                     </View>
                                     <Pressable style={{ flex: 0.15 }}>
-                                        <Image source={selectedQuestion === item._id ? minus : plusIcon} style={{ width: WIDTH * 0.06, height: HEIGHT * 0.03 }} />
+                                        <Image source={selectedQuestion === item._id ? minus : plusIcon} style={{ width: WIDTH * 0.06, height: HEIGHT * 0.02 }} />
                                     </Pressable>
                                 </View>
                                 {selectedQuestion === item._id && (

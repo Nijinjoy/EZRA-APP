@@ -17,37 +17,31 @@ const HomeScreen = () => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [userData, setUserData] = useState([]);
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
 
-    const fetchUserData = async () => {
-        try {
-            const response = await fetch('https://hbkuesra.herokuapp.com/api/user/getUser')
-            const data = await response.json();
-            setUserData(data);
-            console.log('userData==>', userData);
-        }
-        catch (error) {
-            console.error('Error fetching user data:', error);
-        }
-    };
-
-    const openModal = () => {
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-    };
-
-    const openGallery = () => {
-
-    }
-
-    const openCamera = () => {
-
-    }
+    // const getUser = async () => {
+    //     try {
+    //         const response = await fetch(`${Api}/user/getUser`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+    //         if (response.ok) {
+    //             const responseData = await response.json();
+    //             if (responseData.status) {
+    //                 const userData = responseData.data;
+    //                 setUserData(userData);
+    //                 console.log("userData==>", userData);
+    //             } else {
+    //                 console.error('API Error:', responseData.message);
+    //             }
+    //         } else {
+    //             console.error('Failed to fetch user data');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching user data:', error);
+    //     }
+    // };
 
     return (
         <View style={{ borderWidth: 0.5, borderColor: colors.lightBlue }}>
@@ -57,7 +51,11 @@ const HomeScreen = () => {
                 </View>
             </ImageBackground>
             <View style={{ marginHorizontal: WIDTH * 0.05 }}>
-                <Text style={{ fontSize: 13, color: colors.lightGrey, fontWeight: "600" }}>Children's profiles </Text>
+                <View style={{ borderWidth: 0 }}>
+                    <Text style={{ fontSize: 13, color: colors.lightGrey, fontWeight: "600" }}>Welcome</Text>
+                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>Nijin</Text>
+                </View>
+
                 <Pressable onPress={Navigation.navigate('AddChildScreen')} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.190, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.darkViolet, marginVertical: HEIGHT * 0.05, borderRadius: WIDTH * 0.02 }}>
                     <Image source={contact} style={{ width: WIDTH * 0.12, height: HEIGHT * 0.07 }} />
                     <Text style={{
@@ -67,18 +65,18 @@ const HomeScreen = () => {
             </View>
 
             <Modal visible={isModalVisible} animationType="slide" transparent >
-                <Pressable style={{ flex: 1 }} onPress={closeModal}>
+                <Pressable style={{ flex: 1 }} /* onPress={closeModal} */  >
                     <View style={{ backgroundColor: colors.white, borderWidth: 0, borderTopLeftRadius: WIDTH * 0.05, borderTopRightRadius: WIDTH * 0.05, justifyContent: 'flex-end', alignItems: "center", position: 'absolute', bottom: 0, width: WIDTH }}>
                         <View style={{ position: 'absolute', top: HEIGHT * 0.01, right: WIDTH * 0.05 }}>
                             <Text style={{ fontSize: 25 }}>*</Text>
                         </View>
                         <Text style={{ textAlign: "center", fontSize: 17, marginTop: 20 }}>Upload or capture network</Text>
                         <View style={{ flexDirection: 'row', padding: HEIGHT * 0.03, justifyContent: 'center', alignItems: 'center', pointerEvents: 'box-none' }}>
-                            <Pressable onPress={openGallery} style={{ padding: WIDTH * 0.07, backgroundColor: colors.grey, borderRadius: WIDTH * 0.02, marginRight: WIDTH * 0.05 }}>
+                            <Pressable /* onPress={openGallery} */ style={{ padding: WIDTH * 0.07, backgroundColor: colors.grey, borderRadius: WIDTH * 0.02, marginRight: WIDTH * 0.05 }}>
                                 <Image source={gallery} style={{ width: WIDTH * 0.11, height: HEIGHT * 0.062 }} />
                                 <Text style={{ color: colors.darkViolet }}>Gallery</Text>
                             </Pressable>
-                            <Pressable onPress={openCamera} style={{ backgroundColor: colors.grey, padding: WIDTH * 0.07, justifyContent: 'center', alignItems: "center", borderRadius: WIDTH * 0.02 }}>
+                            <Pressable /* onPress={openCamera} */ style={{ backgroundColor: colors.grey, padding: WIDTH * 0.07, justifyContent: 'center', alignItems: "center", borderRadius: WIDTH * 0.02 }}>
                                 <Image source={camera} style={{ width: WIDTH * 0.097, height: HEIGHT * 0.056 }} />
                                 <Text style={{ color: colors.darkViolet }}>Camera</Text>
                             </Pressable>
@@ -92,5 +90,3 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen
-
-

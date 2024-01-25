@@ -1,4 +1,3 @@
-
-const Api = "https://hbkuesra.herokuapp.com/api"
+const Api = "https://esra-dev.applab.qa/api"
 
 export { Api }

@@ -1,31 +1,37 @@
 import { View, Text, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { bottomIntersection, logoIcon } from '../assets/images'
 import { Dimensions } from 'react-native'
-import { colors } from '../constants/Colors'
-import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import { colors } from '../constants/Colors'
+import { HEIGHT, WIDTH } from '../constants/Dimensions'
+import { bottomIntersection, logoIcon } from '../assets/images'
+import { useDispatch } from 'react-redux'
+import { getUserProfile } from '../redux/action/commonAction'
 
 const SplashScreen = () => {
-    const Navigation = useNavigation()
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        const checkUserSignedUp = async () => {
-            try {
-                const userData = await AsyncStorage.getItem('userData');
-                if (userData) {
-                    Navigation.replace('HomeScreen');
-                } else {
-                    Navigation.replace('GetStartedScreen');
-                }
-            } catch (error) {
-                console.error('Error checking user signup status:', error);
-            }
-        };
         checkUserSignedUp();
     }, []);
+
+    const checkUserSignedUp = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (token !== null) {
+                console.log('Token:===>', token);
+                dispatch(getUserProfile(token))
+                navigation.navigate('Drawers');
+            } else {
+                navigation.navigate('GetStartedScreen');
+            }
+        } catch (error) {
+            console.error('Error checking user signup status:', error);
+        }
+    };
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>
@@ -43,6 +49,5 @@ const SplashScreen = () => {
         </View>
     )
 }
-
 
 export default SplashScreen

@@ -14,11 +14,19 @@ import TextInputs from '../components/TextInputs'
 const Data = [
     {
         id: 1,
+        label: "Name",
+        placeholder: "User name",
+        key: "Name"
+    },
+    {
+        id: 2,
+        label: "Email",
         placeholder: "Email address",
         key: "Email"
     },
     {
-        id: 2,
+        id: 3,
+        label: "Password",
         placeholder: "Password",
         img: eye,
         key: "Password",
@@ -26,7 +34,8 @@ const Data = [
         togglePassword: true
     },
     {
-        id: 3,
+        id: 4,
+        label: "Repeat Password",
         placeholder: "Repeat password",
         key: "repeatPassword",
         secureTextEntry: true,
@@ -35,9 +44,9 @@ const Data = [
 ]
 
 const SignUpScreen = () => {
-    const Navigation = useNavigation()
+    const navigation = useNavigation()
     const [error, setError] = useState("");
-    const [formData, setFormData] = useState({ Email: "", Password: "" })
+    const [formData, setFormData] = useState({ Email: "", Password: "", Name: "" })
 
     const handleState = (key, val) => {
         error[key] = ""
@@ -47,32 +56,43 @@ const SignUpScreen = () => {
     }
 
     const onRegister = async () => {
-        const { Email, Password } = formData;
+        const { email, password, name } = formData;
         try {
+            var body = new FormData();
+            body.append("email", email);
+            body.append("password", password);
+            body.append("name", name);
             const response = await fetch(`${Api}/user/register`, {
                 method: "POST",
                 body: JSON.stringify({
-                    email: Email,
-                    password: Password,
+                    email: email,
+                    password: password,
+                    name: name
                 }),
                 headers: {
-                    "Content-Type": "application/json",
-                }
+                    "Content-Type": "application/json"
+                },
             });
-            const data = await response.text();
-            if (response.ok) {
-                await AsyncStorage.setItem('email', Email);
-                await AsyncStorage.setItem('password', Password);
-                console.log("User registered ==>", data);
-                Navigation.navigate('HomeScreen');
+            const data = await response.json();
+            if (response.status) {
+                const token = data?.data?.token;
+                if (token) {
+                    await AsyncStorage.setItem('token', token);
+                    console.log("User successfully registered. Token:", token);
+                    navigation.navigate('HomeScreen')
+                } else {
+                    console.log("Token not found in the response:", data);
+                    Alert.alert('Alert', 'This email already exists')
+                }
             } else {
-                console.log("Registration failed:", data);
+                console.log("Registration failed:", data.message);
+                setError(data.message);
             }
         } catch (error) {
             console.log("Error:", error);
+            setError("An error occurred during registration");
         }
     };
-
 
     return (
         <ScrollView style={{ flex: 1 }}>
@@ -96,18 +116,17 @@ const SignUpScreen = () => {
                             />
                         }
                         keyExtractor={item => item.id} />
-                    <View style={{ marginTop: HEIGHT * 0.05 }}>
+                    <View style={{ marginTop: HEIGHT * 0.02 }}>
                         <ButtonComponent
-                            text="Sign up"
-                            borderRadius={HEIGHT * 0.01}
-                            background={colors.darkViolet}
-                            textColor={colors.white}
-                            nextarrow={nextArrow}
-                            navigate={onRegister}
+                            label="Sign up"
+                            containerStyle={{ borderRadius: WIDTH * 0.01, width: WIDTH * 0.84, height: HEIGHT * 0.072, backgroundColor: colors.darkViolet, }}
+                            labelStyle={{ color: colors.white }}
+                            icon={nextArrow}
+                            onPress={onRegister}
                         />
                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }} >
                             <Text style={{ fontSize: 14, color: colors.lightGrey }}>Already have an account.</Text>
-                            <Pressable onPress={() => Navigation.navigate('HomeScreen')}>
+                            <Pressable onPress={() => navigation.navigate('SignInScreen')}>
                                 <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign in</Text>
                             </Pressable>
                         </View>
@@ -117,4 +136,5 @@ const SignUpScreen = () => {
         </ScrollView>
     )
 }
+
 export default SignUpScreen

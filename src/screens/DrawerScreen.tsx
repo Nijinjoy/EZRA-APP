@@ -1,12 +1,11 @@
 import { View, Text, ImageBackground, FlatList, Pressable, Image, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { call, drawerArrow, drawerProfile, drawerShade, drawingsIcon, evaluateIcon, faq, history } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { colors } from '../constants/Colors';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LanguageComponent from '../components/LanguageComponent';
-import { CommonActions } from '@react-navigation/native';
 import SignInScreen from './SignInScreen';
 
 const DATA = [
@@ -61,21 +60,48 @@ const DATA = [
     }
 ]
 
+
 const DrawerScreen = () => {
-    const Navigation = useNavigation()
+    const navigation = useNavigation()
     const route = useRoute()
     const { childName } = route.params || {};
+    const [formData, setFormData] = useState({ email: '', name: '' })
+
+    useEffect(() => {
+        const getUserInfo = async () => {
+            try {
+                const userName = await AsyncStorage.getItem('name');
+                const userEmail = await AsyncStorage.getItem('email');
+                console.log("Retrieved user==>", { userName, userEmail });
+                setFormData(name || '');
+                setFormData(email || '');
+            } catch (error) {
+                console.error('Error retrieving user information:', error);
+            }
+        };
+        getUserInfo();
+    }, []);
 
     const onLogout = async () => {
-        Navigation.navigate('SignInScreen')
-    }
+        try {
+            await AsyncStorage.removeItem('token');
+            navigation.dispatch(CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'SignInScreen' }
+                ],
+            }));
+        } catch (error) {
+            console.error('Error removing user token:', error);
+        }
+    };
 
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={drawerShade} style={{ width: WIDTH * 0.749, height: HEIGHT * 0.25, backgroundColor: colors.lightBlue }} resizeMode='contain'>
                 <View style={{ margin: HEIGHT * 0.04, position: 'absolute', bottom: HEIGHT * 0.03 }}>
-                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>Aaliya Ahammed</Text>
-                    <Text style={{ fontSize: 13, color: colors.lightGrey }}>aaliya@gmail.com</Text>
+                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>{formData.email}Nijin</Text>
+                    <Text style={{ fontSize: 13, color: colors.lightGrey }}>{formData.name}nijin@gmail.com</Text>
                 </View>
             </ImageBackground>
             <ScrollView>
@@ -107,7 +133,7 @@ const DrawerScreen = () => {
                     }}
                 />
                 <View style={{ marginHorizontal: WIDTH * 0.01 }}>
-                    <LanguageComponent />
+                    {/* <LanguageComponent /> */}
                     <Pressable style={{ borderWidth: 0.5, width: WIDTH * 0.34, height: HEIGHT * 0.04, justifyContent: "center", alignItems: 'center', borderRadius: WIDTH * 0.01, marginHorizontal: WIDTH * 0.07, marginVertical: HEIGHT * 0.04 }} onPress={onLogout}>
                         <Text style={{ fontSize: 16, color: colors.darkViolet }}>Log out</Text>
                     </Pressable>
@@ -116,5 +142,6 @@ const DrawerScreen = () => {
         </View >
     )
 }
+
 
 export default DrawerScreen

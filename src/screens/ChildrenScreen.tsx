@@ -61,7 +61,6 @@ const ChildrenScreen = () => {
         }
     };
 
-
     return (
         <View style={{ flex: 1, margin: HEIGHT * 0.01 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1 }}>
@@ -70,7 +69,7 @@ const ChildrenScreen = () => {
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ justifyContent: "center", alignItems: 'center', flex: 1 }}>
-                {/* <Text style={{ color: colors.grey }}>Empty View</Text> */}
+
             </View>
         </View >
     )

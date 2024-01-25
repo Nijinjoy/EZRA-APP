@@ -6,12 +6,13 @@ import { eye } from '../assets/images';
 
 const TextInputs = (props) => {
 
-    const { placeholder, height, viewStyle, paddingLeft, onChangeText, errorMsg, backgroundColor, placeholderTextColor, togglePassword, secureTextEntry = false, style3, borderRadius } = props;
+    const { placeholder, height, viewStyle, paddingLeft, onChangeText, errorMsg, backgroundColor, placeholderTextColor, togglePassword, secureTextEntry = false, style3, borderRadius, label } = props;
 
     const [isSecureTextEntry, setIsSecureTextEntry] = useState(secureTextEntry)
 
     return (
         <View>
+            <Text style={{ color: colors.darkViolet, fontSize: 14, marginBottom: 0 }}>{label}</Text>
             <View style={{ height: HEIGHT * 0.07, marginVertical: HEIGHT * 0.012, borderRadius: WIDTH * 0.015, backgroundColor: backgroundColor, ...viewStyle }}>
                 <View style={{ marginHorizontal: WIDTH * 0.05, flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput

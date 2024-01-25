@@ -5,18 +5,20 @@ import { america, arrowIcon, blueIcon, bottomIntersection, cameraIcon, getstarte
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import ButtonComponent from '../components/ButtonComponent'
 import { useNavigation } from '@react-navigation/native'
+import { setProfile, setToken } from '../redux/action/commonAction'
+import { useDispatch } from 'react-redux'
 
 const GetStartedScreen = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('EN');
     const Navigation = useNavigation()
+    const dispatch = useDispatch()
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightWhite }}>
             <View style={{ position: 'absolute', top: HEIGHT * -0.06 }}>
                 <Image source={topIntersection} style={{ width: WIDTH, height: HEIGHT * 0.128 }} resizeMode='contain' />
             </View>
-
-            <View style={{ borderWidth: 0, width: WIDTH * 0.287, /* height: HEIGHT * 0.03, */ position: 'absolute', right: WIDTH * 0.08, marginTop: HEIGHT * 0.07, backgroundColor: colors.grey, borderRadius: WIDTH * 0.02, flexDirection: 'row', alignItems: "center", padding: 2 }}>
+            <View style={{ borderWidth: 0, width: WIDTH * 0.287, position: 'absolute', right: WIDTH * 0.08, marginTop: HEIGHT * 0.07, backgroundColor: colors.grey, borderRadius: WIDTH * 0.02, flexDirection: 'row', alignItems: "center", padding: 2 }}>
                 <Pressable onPress={() => setSelectedLanguage('EN')} style={{ borderWidth: 0, margin: WIDTH * 0.008, width: WIDTH * 0.12, borderRadius: WIDTH * 0.01, justifyContent: "center", alignItems: 'center', flexDirection: 'row', backgroundColor: selectedLanguage === 'EN' ? colors.white : colors.grey, padding: HEIGHT * 0.005 }}>
                     <Image source={america} style={{ width: WIDTH * 0.06, height: HEIGHT * 0.02 }} resizeMode='contain' />
                     <Text style={{}}>EN</Text>
@@ -38,21 +40,19 @@ const GetStartedScreen = () => {
                 <Text style={{ fontSize: 24, color: colors.violet }}>Recognition Application</Text>
                 <View style={{ marginVertical: HEIGHT * 0.03 }}>
                     <ButtonComponent
-                        background={colors.darkViolet}
-                        text="Get Started"
-                        textColor={colors.white}
-                        Width={WIDTH * 0.9}
-                        nextarrow={nextArrow}
-                        navigate={() => Navigation.navigate('SignUpScreen')}
+                        //containerStyle={{ backgroundColor: colors.darkViolet, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02 }}
+                        //labelStyle={{ color: colors.white }}
+                        icon={nextArrow}
+                        label="Get Started"
+                    // onPress={() => dispatch(setProfile("Test"))}
                     />
                 </View>
                 <View style={{}}>
                     <ButtonComponent
-                        background={colors.white}
-                        textColor={colors.violet}
-                        Width={WIDTH * 0.9}
-                        text="Sign in"
-                        navigate={() => Navigation.navigate('SignInScreen')}
+                        containerStyle={{ backgroundColor: colors.white, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
+                        labelStyle={{ color: colors.lightBlack }}
+                        label="Sign in"
+                        onPress={() => Navigation.navigate('SignInScreen')}
                     />
                 </View>
             </View>

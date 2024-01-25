@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Alert, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native'
+import { View, Text, Image, Pressable, Alert, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { biometricIcon, eye, nextArrow, signinIntersection } from '../assets/images';
@@ -10,27 +10,31 @@ import PasswordComponent from '../components/PasswordComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Api } from './Api';
 import TextInputs from '../components/TextInputs';
-
+import { useDispatch } from 'react-redux';
+import { getUserProfile } from '../redux/action/commonAction';
 
 const Data = [
     {
         id: 1,
+        label: "Email",
         placeholder: "Email",
-        key: "Email"
+        key: "email",
     },
     {
         id: 2,
+        label: "Password",
         placeholder: "Password",
-        key: "Password",
+        key: "password",
         secureTextEntry: true
     }
 ]
 
 
 const SignInScreen = () => {
-    const [formData, setFormData] = useState({ Email: "", Password: "" })
-    const Navigation = useNavigation()
-    const [error, setError] = useState("");
+    const [formData, setFormData] = useState({ email: "", password: "" })
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
+    const [error, setError] = useState({ email: "", password: "" });
 
     const handleState = (key, val) => {
         error[key] = ""
@@ -40,38 +44,56 @@ const SignInScreen = () => {
     }
 
     const onLogin = async () => {
-        const { Email, Password } = formData;
+        const { email, password } = formData;
+        // let isValid = true;
+        // const newError = {}
+        // if (!email.trim()) {
+        //     newError.email = "Email is required"
+        //     isValid = false;
+        // } else if (!/\S+@\S+\.\S+/.test(email)) {
+        //     newError.email = "Invalid email";
+        //     isValid = false;
+        // }
+        // if (!password.trim()) {
+        //     newError.password = "Password is required";
+        //     isValid = false;
+        // }
+        // if (!isValid) {
+        //     setError(newError);
+        //     return;
+        // }
+
         try {
             const response = await fetch(`${Api}/user/login`, {
                 method: "POST",
                 body: JSON.stringify({
-                    email: Email,
-                    password: Password,
+                    email: email,
+                    password: password,
                 }),
                 headers: {
-                    "Content-Type": "application/json"
-                },
-            });
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Login response:", data);
+                    "Content-Type": "application/json",
+                }
+            })
+            const data = await response.json();
+            if (response.status) {
+                const token = data?.data?.token;
+                await AsyncStorage.setItem('token', token);
+                if (token) {
+                    dispatch(getUserProfile(token))
 
-                if (data && data._id) {
-                    await AsyncStorage.setItem('userId', data._id);
-                    await AsyncStorage.setItem('email', Email);
-                    await AsyncStorage.setItem('password', Password);
-                    console.log("User successfully authenticated");
-                    Navigation.navigate('HomeScreen');
-                } else {
-                    console.log("Invalid user credentials or missing _id field");
+                    navigation.navigate('Drawers');
+                    console.log("Token not found in AsyncStorage");
                 }
             } else {
-                console.log("Login failed. Status:", response.status);
+                console.log("Token not found in the response:", data);
+                setError("Token not found in the response");
             }
-        } catch (error) {
-            console.log("Error:", error);
         }
-    };
+        catch (error) {
+            console.log("Error:", error);
+            setError("An error occurred during login");
+        }
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.violet }}>
@@ -80,32 +102,40 @@ const SignInScreen = () => {
                 <View style={{ marginHorizontal: WIDTH * 0.08 }}>
                     <Text style={{ fontSize: 24, color: colors.darkViolet }}>Sign in </Text>
                     <Text style={{ color: colors.lightGrey, fontSize: 15 }}>Sign in if you already have your account</Text>
-                    <View>
-                        <View style={{ marginHorizontal: WIDTH * 0.01, marginTop: 20 }}>
-                            <FlatList
-                                data={Data}
-                                renderItem={({ item }) => {
-                                    return <TextInputs
+                    <View style={{ marginHorizontal: WIDTH * 0.01, marginTop: HEIGHT * 0.03 }}>
+                        <FlatList
+                            data={Data}
+                            renderItem={({ item }) => (
+                                <>
+                                    <TextInputs
                                         {...item}
                                         secureTextEntry={item?.secureTextEntry}
                                         viewStyle={{ height: HEIGHT * 0.07, borderWidth: 1, borderColor: colors.grey, justifyContent: "center", borderRadius: WIDTH * 0.015 }}
                                         errorMsg={error[item.key]}
                                         togglePasswd={item?.secureTextEntry}
-                                        onChangeText={val => {
+                                        onChangeText={(val) => {
                                             handleState(item.key, val);
-                                        }} />
-                                }}
-                                keyExtractor={item => item.id}
-                            />
-                        </View>
-                        <View style={{ marginTop: HEIGHT * 0.03, alignItems: 'center' }}>
-                            <ButtonComponent onPress={onLogin} text="Sign in" nextarrow={nextArrow} background={colors.darkViolet} textColor={colors.white} />
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }}>
-                                <Text style={{ fontSize: 14, color: colors.lightGrey }}>Don't have an account.</Text>
-                                <Pressable onPress={() => Navigation.navigate('SignUpScreen')}>
-                                    <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign Up</Text>
-                                </Pressable>
-                            </View>
+                                        }}
+                                    />
+                                </>
+                            )}
+                            keyExtractor={(item) => item.id.toString()}
+                        />
+                    </View>
+                    <View style={{ marginTop: HEIGHT * 0.03, alignItems: 'center' }}>
+                        <ButtonComponent
+                            containerStyle={{ backgroundColor: colors.darkViolet, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02 }}
+                            labelStyle={{ color: colors.white }}
+                            icon={nextArrow}
+                            label="Sign in"
+                            onPress={onLogin}
+                        // onPress={() => navigation.navigate('Drawers')}
+                        />
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', margin: WIDTH * 0.03 }}>
+                            <Text style={{ fontSize: 14, color: colors.lightGrey }}>Don't have an account.</Text>
+                            <Pressable onPress={() => navigation.navigate('SignUpScreen')} >
+                                <Text style={{ fontSize: 14, fontWeight: "600", color: colors.darkViolet }}>Sign Up</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
@@ -119,3 +149,4 @@ const SignInScreen = () => {
 }
 
 export default SignInScreen
+
