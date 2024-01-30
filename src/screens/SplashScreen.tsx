@@ -8,7 +8,8 @@ import { colors } from '../constants/Colors'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { bottomIntersection, logoIcon } from '../assets/images'
 import { useDispatch } from 'react-redux'
-import { getUserProfile } from '../redux/action/commonAction'
+import commonAction from '../redux/action/commonAction'
+// import { getUserProfile } from '../redux/action/commonAction'
 
 const SplashScreen = () => {
     const navigation = useNavigation()
@@ -22,8 +23,8 @@ const SplashScreen = () => {
         try {
             const token = await AsyncStorage.getItem('token');
             if (token !== null) {
-                console.log('Token:===>', token);
-                dispatch(getUserProfile(token))
+                dispatch(commonAction.getUserProfile(token))
+                dispatch(commonAction.setToken(token))
                 navigation.navigate('Drawers');
             } else {
                 navigation.navigate('GetStartedScreen');
@@ -32,6 +33,7 @@ const SplashScreen = () => {
             console.error('Error checking user signup status:', error);
         }
     };
+
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>
@@ -49,5 +51,6 @@ const SplashScreen = () => {
         </View>
     )
 }
+
 
 export default SplashScreen

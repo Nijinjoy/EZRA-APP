@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux'
 
 const GetStartedScreen = () => {
     const [selectedLanguage, setSelectedLanguage] = useState('EN');
-    const Navigation = useNavigation()
+    const navigation = useNavigation()
     const dispatch = useDispatch()
 
     return (
@@ -44,6 +44,7 @@ const GetStartedScreen = () => {
                         //labelStyle={{ color: colors.white }}
                         icon={nextArrow}
                         label="Get Started"
+                        onPress={() => navigation.navigate('SignUpScreen')}
                     // onPress={() => dispatch(setProfile("Test"))}
                     />
                 </View>
@@ -52,7 +53,7 @@ const GetStartedScreen = () => {
                         containerStyle={{ backgroundColor: colors.white, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
                         labelStyle={{ color: colors.lightBlack }}
                         label="Sign in"
-                        onPress={() => Navigation.navigate('SignInScreen')}
+                        onPress={() => navigation.navigate('SignInScreen')}
                     />
                 </View>
             </View>

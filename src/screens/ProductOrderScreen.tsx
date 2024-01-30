@@ -1,6 +1,5 @@
 import { View, Text, ImageBackground, Pressable, Image, ScrollView, Alert, SafeAreaView } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { colors } from '../constants/Colors'
 import HeaderComponent from '../components/HeaderComponent'
 import { backArrow, blueIcon, nextArrow, shadedIcon } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
@@ -10,94 +9,90 @@ import ImageComponent from '../components/ImageComponent'
 import ButtonComponent from '../components/ButtonComponent'
 import ChooseprdctComponent from '../components/ChooseprdctComponent'
 import axios from 'axios'
+import { colors } from '../constants/Colors'
 import { Api } from './Api'
+import { useDispatch, useSelector } from 'react-redux'
+import commonAction from '../redux/action/commonAction'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-
 const ProductOrderScreen = () => {
-    const Navigation = useNavigation()
-    const [formData, setFormData] = useState({ Name: '', Email: '', Phone: '', productId: "", Image: '', addressLine1: '', addressLine2: {} })
+    const navigation = useNavigation()
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', productId: "", image: [], addressLine1: {}, addressLine2: {} })
     const [productlist, setProductlist] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const dispatch = useDispatch()
+    const { token } = useSelector((state) => state?.commonReducer)
 
     const handleProductSelect = (productId) => {
         setSelectedProduct(productId);
     };
 
     const getTotalPrice = () => {
-        if (!productlist || !productlist.data) {
-            return 'Total price: N/A';
-        }
         const product = productlist.data.find(item => item._id === selectedProduct);
         const quantity = 1;
         const totalPrice = product ? product.price * quantity : null;
         return totalPrice !== null ? ` ${totalPrice} QAR` : 'Total price: N/A';
     };
 
+    const fetchProducts = async () => {
+        try {
+            const apiUrl = `${Api}/products`;
+            const headers = {
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            };
+            const response = await axios.get(apiUrl, { headers });
+            if (!response.data.status) {
+                throw new Error(`API error! Message: ${response.data.message}`);
+            }
+            setProductlist(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
-        const apiUrl = 'https://esra-dev.applab.qa/api/products';
-        const headers = {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmQ1NWYzMDZmMzA0MzAwNzQxMmQ5M2MiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjc2NTMwNjk3fQ.8ZUDKzZ9Lfx8_23JC2yPzYFUGwRmIOBG_L0ZZxcexrk`,
-            'Content-Type': 'application/json',
-        };
-        axios.get(apiUrl, { headers })
-            .then(response => {
-                if (!response.data.status) {
-                    throw new Error(`API error! Message: ${response.data.message}`);
-                }
-                setProductlist(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
+        fetchProducts(token);
+    }, [token]);
+
+    const handleTextChange = (key, text) => {
+        setFormData(prevData => ({
+            ...prevData,
+            [key]: text,
+        }));
+    };
 
     const formFields = [
-        { label: 'Name', stateKey: 'childname', component: <TextInputComponent placeholder="Enter your name" /> },
-        { label: 'Email', stateKey: 'message', component: <TextInputComponent placeholder="Enter your email" /> },
-        { label: 'Phone number', stateKey: 'message', component: <TextInputComponent placeholder="Phone number" /> },
-        { label: 'Choose product', stateKey: 'image', component: <ChooseprdctComponent productList={productlist} /> },
+        { label: 'Name', stateKey: 'childname', component: <TextInputComponent placeholder="Enter your name" onChangeText={(text) => handleTextChange('childname', text)} /> },
+        { label: 'Email', stateKey: 'message', component: <TextInputComponent placeholder="Enter your email" onChangeText={(text) => handleTextChange('email', text)} /> },
+        { label: 'Phone number', stateKey: 'message', component: <TextInputComponent placeholder="Phone number" onChangeText={(text) => handleTextChange('phone', text)} /> },
+        { label: 'Choose product', stateKey: 'image', component: <ChooseprdctComponent productList={productlist} onSelect={handleProductSelect} /> },
         { label: 'Upload image', stateKey: 'image', component: <ImageComponent /> },
-        { label: 'Address', stateKey: 'phone', component: <TextInputComponent placeholder="Address line 1" /> },
-        { stateKey: 'phone', component: <TextInputComponent placeholder="Address line 2" /> },
+        { label: 'Address', stateKey: 'phone', component: <TextInputComponent placeholder="Address line 1" onChangeText={(text) => handleTextChange('addressLine1', text)} /> },
+        { stateKey: 'phone', component: <TextInputComponent placeholder="Address line 2" onChangeText={(text) => handleTextChange('addressLine2', text)} /> },
     ];
 
     const createOrder = async () => {
-        const { Name, Email, Phone, productId, Image, addressLine1, addressLine2 } = formData;
+        const { name, email, phone, image, addressLine1, addressLine2, productId } = formData;
         try {
-            const response = await fetch(`https://esra-dev.applab.qa/api/orders`, {
-                method: 'POST',
+            const response = await fetch(`${Api}/orders`, {
+                method: "POST",
                 body: JSON.stringify({
-                    name: Name,
-                    email: Email,
-                    phone: Phone,
-                    productId: productId,
-                    image: Image,
-                    addressLine1: addressLine1,
-                    addressLine2: addressLine2,
+                    name, email, image, phone, addressLine1, addressLine2, productId
                 }),
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 }
             })
-            if (response.ok) {
-                const data = await response.json()
-                if (data && data._id) {
-                    await AsyncStorage.setItem('userid', data._id);
-                    await AsyncStorage.setItem('name', Name);
-                    await AsyncStorage.setItem('email', Email);
-                    await AsyncStorage.setItem('productid', productId);
-                    await AsyncStorage.setItem('image', Image);
-                    await AsyncStorage.setItem('addressLine1', addressLine1);
-                    await AsyncStorage.setItem('addressLine2', addressLine2)
-                    Alert.alert('Successfull order')
-                    Navigation.navigate('OrderHistoryScreen');
-                } else {
-                    console.log("Invalid user credentials or missing _id field");
+            const data = await response.json();
+            if (response.status) {
+                const token = data?.data?.token;
+                if (token) {
+                    dispatch(commonAction.createOrder(token));
+                    navigation.navigate('OrderHistoryDrawer');
                 }
-            }
-            else {
-                console.log("Login failed. Status:", response.status);
+            } else {
+                console.log("Token not found in the response:", data);
             }
         }
         catch (error) {
@@ -110,11 +105,11 @@ const ProductOrderScreen = () => {
         <View style={{ flex: 1, backgroundColor: colors.white }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title="Order a product"
+                    <HeaderComponent title="Wear your emotions"
                         backArrow={backArrow}
                         Width={WIDTH * 0.045}
                         Height={HEIGHT * 0.022}
-                        navigation={() => Navigation.goBack()}
+                        navigation={() => navigation.goBack()}
                         fontsize={18}
                     />
                 </SafeAreaView>
@@ -123,7 +118,7 @@ const ProductOrderScreen = () => {
                 <View>
                     {formFields.map((field, index) => (
                         <View key={index} style={{ marginBottom: HEIGHT * 0.02 }}>
-                            <Text style={{ fontSize: 12, color: colors.darkViolet }}>{field.label}</Text>
+                            <Text style={{ fontSize: 13, color: colors.darkViolet }}>{field.label}</Text>
                             <View style={{ marginTop: HEIGHT * 0.01 }}>
                                 {field.label === 'Choose product' ? (
                                     <ChooseprdctComponent productList={productlist} onSelect={handleProductSelect} />
@@ -133,26 +128,22 @@ const ProductOrderScreen = () => {
                             </View>
                         </View>
                     ))}
-
                     {selectedProduct && (
-                        <Text style={{ fontSize: 14 }}>Total Price:<Text style={{ color: colors.red }}>{getTotalPrice()} </Text></Text>
-                    )
-                    }
+                        <Text style={{ fontSize: 14 }}>Total Price:<Text style={{ color: colors.red }}>{getTotalPrice()}</Text></Text>
+                    )}
                     <Text style={{ fontSize: 13, color: colors.grey, fontWeight: '500', marginVertical: HEIGHT * 0.02, marginHorizontal: WIDTH * 0.01 }}>Disclaimer:All orders will be handled externally,upon receiving your order,you will be contacted by our team to finalize your order.</Text>
                 </View>
-                <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                    <ButtonComponent
-                        containerStyle={{ backgroundColor: colors.darkViolet, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
-                        label="Complete Order"
-                        labelStyle={{ color: colors.white }}
-                        icon={nextArrow}
-                        onPress={createOrder}
-                    />
-                </View>
+                <ButtonComponent
+                    containerStyle={{ backgroundColor: colors.darkViolet, width: WIDTH * 0.9, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
+                    label="Complete Order"
+                    labelStyle={{ color: colors.white }}
+                    icon={nextArrow}
+                    onPress={createOrder}
+                />
             </ScrollView >
         </View >
     )
 }
 
-
 export default ProductOrderScreen
+

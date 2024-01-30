@@ -11,7 +11,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Api } from './Api';
 import TextInputs from '../components/TextInputs';
 import { useDispatch } from 'react-redux';
-import { getUserProfile } from '../redux/action/commonAction';
+// import { getUserProfile } from '../redux/action/commonAction';
+import getUserProfile from '../redux/action/commonAction';
+import commonAction from '../redux/action/commonAction';
+
 
 const Data = [
     {
@@ -29,7 +32,6 @@ const Data = [
     }
 ]
 
-
 const SignInScreen = () => {
     const [formData, setFormData] = useState({ email: "", password: "" })
     const navigation = useNavigation()
@@ -45,24 +47,6 @@ const SignInScreen = () => {
 
     const onLogin = async () => {
         const { email, password } = formData;
-        // let isValid = true;
-        // const newError = {}
-        // if (!email.trim()) {
-        //     newError.email = "Email is required"
-        //     isValid = false;
-        // } else if (!/\S+@\S+\.\S+/.test(email)) {
-        //     newError.email = "Invalid email";
-        //     isValid = false;
-        // }
-        // if (!password.trim()) {
-        //     newError.password = "Password is required";
-        //     isValid = false;
-        // }
-        // if (!isValid) {
-        //     setError(newError);
-        //     return;
-        // }
-
         try {
             const response = await fetch(`${Api}/user/login`, {
                 method: "POST",
@@ -78,11 +62,11 @@ const SignInScreen = () => {
             if (response.status) {
                 const token = data?.data?.token;
                 await AsyncStorage.setItem('token', token);
+                console.log("tokennn==>", token);
                 if (token) {
-                    dispatch(getUserProfile(token))
-
+                    dispatch(commonAction.getUserProfile(token))
+                    dispatch(commonAction.setToken(token))
                     navigation.navigate('Drawers');
-                    console.log("Token not found in AsyncStorage");
                 }
             } else {
                 console.log("Token not found in the response:", data);

@@ -79,7 +79,10 @@ const SignUpScreen = () => {
                 if (token) {
                     await AsyncStorage.setItem('token', token);
                     console.log("User successfully registered. Token:", token);
-                    navigation.navigate('HomeScreen')
+                    navigation.navigate('HomeScreen', {
+                        name: name,
+                        email: email,
+                    })
                 } else {
                     console.log("Token not found in the response:", data);
                     Alert.alert('Alert', 'This email already exists')
@@ -93,6 +96,7 @@ const SignUpScreen = () => {
             setError("An error occurred during registration");
         }
     };
+
 
     return (
         <ScrollView style={{ flex: 1 }}>

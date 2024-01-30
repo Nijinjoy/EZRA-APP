@@ -7,6 +7,7 @@ import { CommonActions, useNavigation, useRoute } from '@react-navigation/native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LanguageComponent from '../components/LanguageComponent';
 import SignInScreen from './SignInScreen';
+import { useSelector } from 'react-redux';
 
 const DATA = [
     {
@@ -18,10 +19,10 @@ const DATA = [
     },
     {
         id: 2,
-        title: 'Evaluate',
+        title: 'Explore',
         icon: evaluateIcon,
         arrow: drawerArrow,
-        path: 'ExploreScreen'
+        path: 'ExploreDrawer'
     },
     {
         id: 3,
@@ -39,17 +40,17 @@ const DATA = [
     },
     {
         id: 5,
-        title: 'Contact an art therapist',
+        title: 'Wear your emotions',
         icon: call,
         arrow: drawerArrow,
-        path: ' ContactScreen'
+        path: 'ProductOrderDrawer'
     },
     {
         id: 6,
-        title: 'Order product',
+        title: 'Contact an art therapist',
         icon: evaluateIcon,
         arrow: drawerArrow,
-        path: 'ProductOrderScreen'
+        path: 'ContactDrawer'
     },
     {
         id: 7,
@@ -63,24 +64,7 @@ const DATA = [
 
 const DrawerScreen = () => {
     const navigation = useNavigation()
-    const route = useRoute()
-    const { childName } = route.params || {};
-    const [formData, setFormData] = useState({ email: '', name: '' })
-
-    useEffect(() => {
-        const getUserInfo = async () => {
-            try {
-                const userName = await AsyncStorage.getItem('name');
-                const userEmail = await AsyncStorage.getItem('email');
-                console.log("Retrieved user==>", { userName, userEmail });
-                setFormData(name || '');
-                setFormData(email || '');
-            } catch (error) {
-                console.error('Error retrieving user information:', error);
-            }
-        };
-        getUserInfo();
-    }, []);
+    const { userDetails } = useSelector((state) => state?.commonReducer)
 
     const onLogout = async () => {
         try {
@@ -96,12 +80,13 @@ const DrawerScreen = () => {
         }
     };
 
+
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={drawerShade} style={{ width: WIDTH * 0.749, height: HEIGHT * 0.25, backgroundColor: colors.lightBlue }} resizeMode='contain'>
                 <View style={{ margin: HEIGHT * 0.04, position: 'absolute', bottom: HEIGHT * 0.03 }}>
-                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>{formData.email}Nijin</Text>
-                    <Text style={{ fontSize: 13, color: colors.lightGrey }}>{formData.name}nijin@gmail.com</Text>
+                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>{userDetails.name}</Text>
+                    <Text style={{ fontSize: 13, color: colors.lightGrey }}>{userDetails.email}</Text>
                 </View>
             </ImageBackground>
             <ScrollView>
@@ -111,7 +96,7 @@ const DrawerScreen = () => {
                     renderItem={({ item, index }) => {
                         return (
                             <React.Fragment>
-                                <Pressable onPress={() => Navigation.navigate(item.path)} style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center', padding: HEIGHT * 0.025 }}>
+                                <Pressable onPress={() => navigation.navigate(item.path)} style={{ flexDirection: "row", justifyContent: "center", alignItems: 'center', padding: HEIGHT * 0.025 }}>
                                     <View style={{ flex: 0.14 }}>
                                         <Image source={item.icon} style={{ width: WIDTH * 0.055, height: HEIGHT * 0.03 }} />
                                     </View>

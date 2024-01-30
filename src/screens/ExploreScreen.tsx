@@ -6,6 +6,7 @@ import HeaderComponent from '../components/HeaderComponent'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useDispatch, useSelector } from 'react-redux'
 
 const data1 = [
     {
@@ -27,7 +28,10 @@ const data1 = [
 ]
 
 const ExploreScreen = () => {
-    const Navigation = useNavigation()
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
+    const { userDetails, addChild } = useSelector((state) => state?.commonReducer)
+
     return (
         <View style={{ flex: 1, margin: 5 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1, }}>
@@ -38,7 +42,7 @@ const ExploreScreen = () => {
                         Width={WIDTH * 0.045}
                         Height={HEIGHT * 0.022}
                         fontsize={18}
-                        navigation={() => Navigation.goBack()}
+                        navigation={() => navigation.goBack()}
                     />
                 </SafeAreaView>
             </ImageBackground>

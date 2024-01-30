@@ -5,58 +5,40 @@ import { camera, contact, drawerIcon, gallery, shadedIcon } from '../assets/imag
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import { DrawerActions, useNavigation, useRoute } from '@react-navigation/native'
-import LanguagComponent from '../components/LanguagComponent'
-import ModalComponent from '../components/ModalComponent'
-import LogoutModalComponent from '../components/LogoutModalComponent'
 import { Api } from './Api'
+import { SET_TOKEN } from '../redux/constants'
+import { useDispatch, useSelector } from 'react-redux'
+import { useReducer } from 'react'
+import commonReducer from '../redux/reducer/commonReducer'
 
 const HomeScreen = () => {
-    const route = useRoute()
-    const Navigation = useNavigation()
-    const { childInfo } = route.params || {};
+    const navigation = useNavigation()
     const [isModalVisible, setModalVisible] = useState(false);
     const [userData, setUserData] = useState([]);
-
-
-    // const getUser = async () => {
-    //     try {
-    //         const response = await fetch(`${Api}/user/getUser`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         if (response.ok) {
-    //             const responseData = await response.json();
-    //             if (responseData.status) {
-    //                 const userData = responseData.data;
-    //                 setUserData(userData);
-    //                 console.log("userData==>", userData);
-    //             } else {
-    //                 console.error('API Error:', responseData.message);
-    //             }
-    //         } else {
-    //             console.error('Failed to fetch user data');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching user data:', error);
-    //     }
-    // };
+    const { userDetails, addChild } = useSelector((state) => state?.commonReducer)
 
     return (
         <View style={{ borderWidth: 0.5, borderColor: colors.lightBlue }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.143, borderWidth: 0 }}>
                 <View style={{ marginTop: HEIGHT * 0.05 }}>
-                    <HeaderComponent backArrow={drawerIcon} fontsize={20} Width={WIDTH * 0.087} Height={HEIGHT * 0.049} navigation={() => Navigation.dispatch(DrawerActions.toggleDrawer())} />
+                    <HeaderComponent backArrow={drawerIcon} fontsize={20} Width={WIDTH * 0.087} Height={HEIGHT * 0.049} navigation={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
                 </View>
             </ImageBackground>
             <View style={{ marginHorizontal: WIDTH * 0.05 }}>
                 <View style={{ borderWidth: 0 }}>
+                    {/* {userDetails.name && <Text style={{ fontSize: 18, color: colors.darkViolet }}>{`Welcome, ${userDetails.name}`}</Text>}
+                    {children.length > 0 && (
+                        <ScrollView horizontal>
+                            {children.map((child, index) => (
+                                <Text key={index}>{child.name}</Text>
+                            ))}
+                        </ScrollView>
+                    )} */}
                     <Text style={{ fontSize: 13, color: colors.lightGrey, fontWeight: "600" }}>Welcome</Text>
-                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>Nijin</Text>
+                    <Text style={{ fontSize: 18, color: colors.darkViolet }}>{userDetails.name}</Text>
                 </View>
 
-                <Pressable onPress={Navigation.navigate('AddChildScreen')} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.190, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.darkViolet, marginVertical: HEIGHT * 0.05, borderRadius: WIDTH * 0.02 }}>
+                <Pressable onPress={() => navigation.navigate('AddChildDrawer')} style={{ width: WIDTH * 0.9, height: HEIGHT * 0.190, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.darkViolet, marginVertical: HEIGHT * 0.05, borderRadius: WIDTH * 0.02 }}>
                     <Image source={contact} style={{ width: WIDTH * 0.12, height: HEIGHT * 0.07 }} />
                     <Text style={{
                         fontSize: 12, color: colors.white, width: WIDTH * 0.4, textAlign: 'center', margin: HEIGHT * 0.01

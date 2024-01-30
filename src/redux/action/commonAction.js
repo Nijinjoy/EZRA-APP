@@ -1,37 +1,52 @@
 import { Api } from "../../screens/Api"
-import { SET_TOKEN, SET_PROFILE } from "../constants"
+import { SET_TOKEN, SET_PROFILE, ADD_CHILD, CREATE_ORDER } from "../constants"
 
-export const setToken = (payload = "") => {
-    console.log(payload)
+
+
+const setToken = (payload = "") => {
+    return async (dispatch) => {
+        dispatch({
+            type: SET_TOKEN,
+            payload
+        })
+    }
+}
+
+const getUserProfile = (token) => {
+    return async (dispatch) => {
+        try {
+            const response = await fetch(`${Api}/user/profile`, {
+                method: 'GET',
+                headers: {
+                    Accept: "application/json",
+                    authorization: `Bearer ${token}`
+                },
+            })
+            const responseJSON = await response.json()
+            dispatch({
+                type: SET_PROFILE,
+                payload: responseJSON?.data
+            })
+        } catch (err) {
+            console.log("err=>", err);
+        }
+    }
+}
+
+const addChild = (childInfo) => {
     return {
-        type: SET_TOKEN,
-        payload
+        type: 'ADD_CHILD',
+        payload: childInfo,
+    };
+};
+
+const createOrder = (formData) => {
+    return {
+        type: 'CREATE_ORDER',
+        payload: formData
     }
 }
 
-export const getUserProfile = async (token) => {
-    const response = await fetch(`${Api}/user/profile`, {
-        method: 'GET',
-        headers: {
-            Accept: "application/json",
-            authorization: `Bearer ${token}`
-        },
-    })
-    const responseJSON = await response.json()
-    console.log("responseJSON ==>", responseJSON)
-    if (responseJSON.status) {
-        dispatch({
-            type: SET_PROFILE,
-            currentUser: data?.data
-        })
-    }
-    /* .then(response => response.json()).then(data => {
-        dispatch({
-            type: SET_PROFILE,
-            currentUser: data?.data
-        })
-    }).catch((err) => console.log("err", err)) */
-    return {}
+export default {
+    setToken, getUserProfile, addChild, createOrder
 }
-
-

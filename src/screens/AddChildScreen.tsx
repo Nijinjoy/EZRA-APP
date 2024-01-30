@@ -1,24 +1,26 @@
-import { View, Text, SafeAreaView, StatusBar, Alert, Pressable, ImageBackground } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, Alert, Pressable, ImageBackground, TextInput, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { colors } from '../constants/Colors'
 import TextInputComponent from '../components/TextInputComponent';
-import PasswordComponent from '../components/PasswordComponent';
 import { backArrow, calender, nextArrow, shadedIcon } from '../assets/images';
 import ButtonComponent from '../components/ButtonComponent';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import GenderComponent from '../components/GenderComponent';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import addChild from '../redux/action/commonAction'
+import commonAction from '../redux/action/commonAction';
+import { useSelector } from 'react-redux';
 import { Api } from './Api';
 
+
 const AddChildScreen = () => {
-    const route = useRoute();
-    const { title, buttonText, isNewChild } = route.params || {};
-    const Navigation = useNavigation();
+    const navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dateOfBirth: '' })
+    const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dob: '' })
+    const dispatch = useDispatch()
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -28,13 +30,6 @@ const AddChildScreen = () => {
         setDatePickerVisibility(false)
     };
 
-    useEffect(() => {
-        if (isNewChild) {
-            setChildInfo({ name: '', gender: 'Male', dateOfBirth: '' });
-        }
-    }, [isNewChild]);
-
-
     const handleDatePicked = (pickedDate) => {
         hideDatePicker();
         const day = pickedDate.getDate().toString().padStart(2, '0');
@@ -42,10 +37,9 @@ const AddChildScreen = () => {
         const year = pickedDate.getFullYear();
         const formattedDate = `${day}/${month}/${year}`;
 
-
         setChildInfo(prevInfo => ({
             ...prevInfo,
-            dateOfBirth: formattedDate
+            dob: formattedDate
         }));
     };
 
@@ -64,37 +58,48 @@ const AddChildScreen = () => {
     };
 
     const handleAddChild = async () => {
+        const { name, gender, dob } = childInfo
         try {
-            await AsyncStorage.setItem('childName', childInfo.name);
-            await AsyncStorage.setItem('childGender', childInfo.gender);
-            await AsyncStorage.setItem('childDateOfBirth', childInfo.dateOfBirth);
-            Navigation.navigate('HomeScreen')
-            // Navigation.navigate('HomeScreen', { childName: childInfo.name });
-            if (route.params?.isNewChild) {
-                setChildInfo({ name: '', gender: 'Male', dateOfBirth: "" });
-                console.log("name==>", childInfo.gender);
+            const response = await fetch(`${Api}/child/addChild`, {
+                method: "POST",
+                body: JSON.stringify({
+                    name: name,
+                    gender: gender,
+                    dob: dob
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            if (response.status) {
+                // console.log("status==>", childInfo);
+                dispatch(commonAction.addChild({ name, gender, dob }));
+                navigation.navigate('HomeScreen');
+            } else {
+                Alert.alert('Error', 'Failed to add child. Please try again.');
             }
         }
         catch (error) {
-            console.error("Error storing child information:", error);
-            Alert.alert('Error', 'An unexpected error occurred.');
+            console.error('Error adding child:', error);
+            Alert.alert('Error', 'An unexpected error occurred. Please try again.');
         }
     }
 
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title={title || "Add a Child"} backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                    <HeaderComponent title="Add a Child" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', color: colors.darkViolet, marginHorizontal: WIDTH * 0.029 }}>Now let's get to know your child more</Text>
+                <Text style={{ fontSize: 22, fontWeight: 'bold', color: colors.darkViolet, marginHorizontal: WIDTH * 0.05 }}>Now let's get to know your child more</Text>
                 <View style={{ marginTop: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Name</Text>
                     <TextInputComponent
                         placeholder="Name"
-                        width={WIDTH * 0.85}
+                        containerStyle={{ width: WIDTH * 0.85 }}
                         onChangeText={handleNameChange}
                     />
                 </View>
@@ -111,15 +116,9 @@ const AddChildScreen = () => {
                 </View>
                 <View style={{ marginTop: HEIGHT * 0.03 }}>
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Date of Birth</Text>
-                    <Pressable onPress={showDatePicker}>
-                        <TextInputComponent
-                            value={childInfo.dateOfBirth}
-                            width={WIDTH * 0.85}
-                            placeholder="Choose a date"
-                            icon={calender}
-                            isTextEnabled={false}
-                            onPress={showDatePicker}
-                        />
+                    <Pressable onPress={showDatePicker} style={{ borderWidth: 1, width: WIDTH * 0.85, padding: HEIGHT * 0.02, borderRadius: WIDTH * 0.01, borderColor: colors.grey, flexDirection: 'row', justifyContent: "space-between" }}>
+                        <Text style={{ color: colors.lightBlack }}>{childInfo.dob !== '' ? childInfo.dob : 'Choose a date'}</Text>
+                        <Image source={calender} style={{ width: WIDTH * 0.04, height: HEIGHT * 0.02 }} resizeMode='contain' />
                     </Pressable>
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -128,13 +127,13 @@ const AddChildScreen = () => {
                         onCancel={hideDatePicker}
                     />
                 </View>
-                <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: WIDTH * 0.05 }}>
+                <View style={{ marginTop: HEIGHT * 0.27 }}>
                     <ButtonComponent
-                        containerStyle={{ backgroundColor: colors.white, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
+                        containerStyle={{ backgroundColor: colors.darkViolet, width: WIDTH * 0.85, height: HEIGHT * 0.072, borderRadius: WIDTH * 0.02, borderColor: colors.grey, borderWidth: 0.5 }}
                         label="Add a child"
                         icon={nextArrow}
                         labelStyle={{ color: colors.white }}
-                        navigate={handleAddChild}
+                        onPress={handleAddChild}
                     />
                 </View>
             </View>
@@ -143,3 +142,5 @@ const AddChildScreen = () => {
 }
 
 export default AddChildScreen
+
+
