@@ -1,10 +1,12 @@
-import { ADD_CHILD, SET_PROFILE, SET_TOKEN, CREATE_ORDER } from "../constants";
+import { ADD_CHILD, SET_PROFILE, SET_TOKEN, CREATE_ORDER, CONTACT_THERAPIST } from "../constants";
 
 const initialState = {
     token: "",
     userDetails: {},
-    addChild: { name: '', gender: '', dob: '' },
-    formData: { name: '', gmail: 'gmail' }
+    addChild: {},
+    formData: {},
+    createOrder: {},
+    contactTherapist: {}
 }
 
 const commonReducer = (state = initialState, action) => {
@@ -16,12 +18,12 @@ const commonReducer = (state = initialState, action) => {
                 token: action.payload
             }
         case SET_PROFILE:
-            // console.log("action.payload==>", action.payload)
             return {
                 ...state,
                 userDetails: action.payload
             }
         case ADD_CHILD:
+            console.log("createOrder.payload===>", action.payload)
             return {
                 ...state,
                 addChild: action.payload
@@ -31,9 +33,16 @@ const commonReducer = (state = initialState, action) => {
                 ...state,
                 createOrder: action.payload,
             }
+        case CONTACT_THERAPIST:
+            // console.log("createOrder.payload===>", action.payload)
+            return {
+                ...state,
+                contactTherapist: action.payload
+            }
         default:
             return state
     }
 }
+
 
 export default commonReducer

@@ -32,6 +32,7 @@ const Data = [
     }
 ]
 
+
 const SignInScreen = () => {
     const [formData, setFormData] = useState({ email: "", password: "" })
     const navigation = useNavigation()

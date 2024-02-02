@@ -8,29 +8,29 @@ import { colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
 
+
 const data1 = [
     {
         id: 1,
-        name: 'Nijin'
+        name: 'Nijin',
     },
     {
         id: 2,
-        name: 'Nijo'
+        name: 'Nijo',
     },
     {
         id: 3,
-        name: 'shijo'
+        name: 'shijo',
     },
-    {
-        id: 4,
-        name: 'shijo'
-    }
 ]
 
 const ExploreScreen = () => {
     const navigation = useNavigation()
-    const dispatch = useDispatch()
-    const { userDetails, addChild } = useSelector((state) => state?.commonReducer)
+    const { userDetails } = useSelector((state) => state?.commonReducer)
+
+    const userDetailsArray = Object.values(userDetails);
+
+    console.log("userdetails///====>", userDetailsArray);
 
     return (
         <View style={{ flex: 1, margin: 5 }}>
@@ -48,8 +48,8 @@ const ExploreScreen = () => {
             </ImageBackground>
             <View style={{ margin: WIDTH * 0.07, flex: 1 }}>
                 <FlatList
-                    data={data1}
-                    keyExtractor={(item) => item.id.toString()}
+                    data={userDetailsArray}
+                    keyExtractor={(item) => item._id}
                     numColumns={3}
                     renderItem={({ item, index }) => {
                         return (

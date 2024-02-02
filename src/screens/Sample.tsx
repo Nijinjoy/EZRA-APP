@@ -1,61 +1,169 @@
-// ... other imports ...
+import { View, Text, SafeAreaView, ImageBackground, SectionList, Pressable, Image, ScrollView, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import HeaderComponent from '../components/HeaderComponent'
+import { backArrow, cup, keyChain, shadedIcon } from '../assets/images'
+import { HEIGHT, WIDTH } from '../constants/Dimensions'
+import { useNavigation } from '@react-navigation/native'
+import { colors } from '../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const ProductOrderScreen = () => {
-    // ... other state and variables ...
 
-    const fetchProducts = async () => {
-        try {
-            const apiUrl = 'https://esra-dev.applab.qa/api/products';
-            const headers = {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmQ1NWYzMDZmMzA0MzAwNzQxMmQ5M2MiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjc2NTMwNjk3fQ.8ZUDKzZ9Lfx8_23JC2yPzYFUGwRmIOBG_L0ZZxcexrk`,
-                'Content-Type': 'application/json',
-            };
-            const response = await axios.get(apiUrl, { headers });
+const OrderHistory1 = [
+    {
+        id: 1,
+        orderid: '#123',
+        title: 'Tuesday,23rd January 2022',
+        icon: cup,
+        name: 'Custom cup print',
+        price: '20',
+        path: 'OrderDetailsScreen'
+    },
+    {
+        id: 2,
+        orderid: '#123',
+        title: 'Tuesday,23rd January 2022',
+        icon: keyChain,
+        name: 'Custom cup print',
+        price: '20',
+        path: 'OrderDetailsScreen'
+    }
+]
 
-            if (!response.data.status) {
-                throw new Error(`API error! Message: ${response.data.message}`);
-            }
+const OrderHistory2 = [
+    {
+        id: 1,
+        orderid: '#123',
+        title: 'Tuesday,23rd January 2022',
+        icon: keyChain,
+        name: 'Custom cup print',
+        price: '20',
+        path: 'OrderDetailsScreen'
+    },
+    {
+        id: 2,
+        orderid: '#123',
+        title: 'Tuesday,23rd January 2022',
+        icon: cup,
+        name: 'Custom cup print',
+        price: '20',
+        path: 'OrderDetailsScreen'
+    },
+    {
+        id: 3,
+        orderid: '#123',
+        icon: keyChain,
+        name: 'Custom cup print',
+        price: '20',
+        path: 'OrderDetailsScreen'
+    },
+    {
+        id: 4,
+        orderid: "#123",
+        icon: keyChain,
+        name: "Custom cup print",
+        price: '30',
+        path: 'OrderDEtailsScreen'
+    }
+]
 
-            setProductlist(response.data);
-            console.log("data====>", response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+const OrderHistory = [
+    {
+        title: 'Tuesday,23rd January 2022',
+        data: OrderHistory1,
+    },
+    {
+        title: "Thursday,25th January 2022",
+        data: OrderHistory2
+    }
+]
+
+
+const OrderHistoryScreen = () => {
+    const [orderData, setOrderData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const Navigation = useNavigation()
+
 
     useEffect(() => {
-        fetchProducts();
+        const fetchData = async () => {
+            try {
+                const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2JkNDkxN2UwOGE1MjA2MWFjNTk3NzIiLCJpc0FkbWluIjp0cnVlLCJyb2xlIjoic3RhZmYiLCJpYXQiOjE2NzMzNDk0MTZ9.D-347fvwGHtspHwYW6OlRD4eFdIGEDSdoL5Mm7XCKTY';
+
+                const response = await fetch('https://esra-dev.applab.qa/api/orders?page_no=7&item_per_page=23', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const responseData = await response.json();
+                if (responseData.status === true) {
+                    const formattedData = responseData.data.map(order => ({
+                        title: new Date(order.createdAt).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        }),
+                        data: order.products.map(product => ({
+                            id: product._id,
+                            orderid: order._id,
+                            icon: { uri: product.image },
+                            name: product.title_en,
+                            price: product.price.toString(),
+                            path: 'OrderDetailsScreen',
+                        })),
+                    }));
+                    setOrderData(formattedData);
+                } else {
+                    setOrderData([]);
+                }
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
 
-    const createOrder = async () => {
-        await fetchProducts();
-        const { name, email, phone, image, addressLine1, addressLine2 } = formData;
-        try {
-            const response = await fetch(`${Api}/orders`, {
-                method: "POST",
-                body: JSON.stringify({
-                    name, email, phone, image, addressLine1, addressLine2
-                }),
-                headers: {
-                    Accept: "application/json",
-                    authorization: `Bearer ${token}`
-                }
-            });
+    return (
+        <View style={{ flex: 1, backgroundColor: colors.white }}>
+            <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
+                <SafeAreaView>
+                    <HeaderComponent title="Order History" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                </SafeAreaView>
+            </ImageBackground>
+            <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
+                {orderData.length === 0 ? (
+                    <View style={{ justifyContent: 'center', alignItems: "center", flex: 1 }}>
+                        <Text style={{ textAlign: 'center', fontSize: 16, color: colors.blue, flex: 1, justifyContent: "center" }}>
+                            No data found
+                        </Text>
+                    </View>
+                ) : (
+                    <SectionList
+                        sections={orderData}
+                        keyExtractor={(item, index) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <Pressable style={{ flexDirection: 'row', margin: 10 }} onPress={() => Navigation.navigate('OrderDetailsScreen', { productDetails: item, title: item.title })}>
+                                <Image source={item.icon} style={{ width: WIDTH * 0.215, height: HEIGHT * 0.1 }} />
+                                <View style={{ flexDirection: "column", margin: HEIGHT * 0.01 }}>
+                                    <Text style={{ color: colors.lightGrey }}>Order ID {item.orderid.substring(0, 8)}</Text>
+                                    <Text style={{ fontSize: 15, color: colors.titleColor }}>{item.name}</Text>
+                                    <Text style={{ color: colors.blue, fontSize: 18, marginTop: HEIGHT * 0.01 }}>QAR <Text style={{ fontWeight: 'bold' }}>{item.price}</Text></Text>
+                                </View>
+                            </Pressable>
+                        )}
+                        renderSectionHeader={({ section: { title } }) => (
+                            <View style={{ marginHorizontal: WIDTH * 0.02, marginVertical: 6 }}>
+                                <Text style={{ fontSize: 15 }}>{title}</Text>
+                            </View>
+                        )}
+                    />
+                )}
+            </ScrollView>
+        </View>
+    )
+}
 
-            if (response?.status) {
-                console.log("responsee===>", response.status);
-                navigation.navigate('OrderHistoryDrawer');
-            } else {
-                Alert.alert('Error', 'Failed to create an order. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error creating order:', error);
-            Alert.alert('Error', 'An unexpected error occurred. Please try again.');
-        }
-    };
-
-    // ... rest of the component ...
-};
-
-export default ProductOrderScreen;
+export default OrderHistoryScreen

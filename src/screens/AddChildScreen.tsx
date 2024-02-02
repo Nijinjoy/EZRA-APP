@@ -15,12 +15,13 @@ import commonAction from '../redux/action/commonAction';
 import { useSelector } from 'react-redux';
 import { Api } from './Api';
 
-
 const AddChildScreen = () => {
     const navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dob: '' })
     const dispatch = useDispatch()
+
+    console.log("childInfo===?>", childInfo);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -29,6 +30,7 @@ const AddChildScreen = () => {
     const hideDatePicker = () => {
         setDatePickerVisibility(false)
     };
+
 
     const handleDatePicked = (pickedDate) => {
         hideDatePicker();
@@ -65,26 +67,24 @@ const AddChildScreen = () => {
                 body: JSON.stringify({
                     name: name,
                     gender: gender,
-                    dob: dob
+                    dob: dob,
                 }),
                 headers: {
                     "Content-Type": "application/json",
                 }
             })
             if (response.status) {
-                // console.log("status==>", childInfo);
-                dispatch(commonAction.addChild({ name, gender, dob }));
+                dispatch(commonAction.addChild(childInfo));
                 navigation.navigate('HomeScreen');
             } else {
-                Alert.alert('Error', 'Failed to add child. Please try again.');
+                Alert.alert('Error', 'Failed to add child');
             }
         }
         catch (error) {
             console.error('Error adding child:', error);
-            Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+            Alert.alert('Error', 'An unexpected error occurred.');
         }
     }
-
 
     return (
         <View style={{ flex: 1, }}>
@@ -99,7 +99,7 @@ const AddChildScreen = () => {
                     <Text style={{ fontSize: 15, color: colors.darkViolet, marginBottom: HEIGHT * 0.01 }}>Name</Text>
                     <TextInputComponent
                         placeholder="Name"
-                        containerStyle={{ width: WIDTH * 0.85 }}
+                        Width={WIDTH * 0.85}
                         onChangeText={handleNameChange}
                     />
                 </View>

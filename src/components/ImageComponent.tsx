@@ -3,9 +3,12 @@ import React, { useState } from 'react'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import { launchImageLibrary } from 'react-native-image-picker';
+import { gallery } from '../assets/images';
+import { useNavigation } from '@react-navigation/native';
 
-const ImageComponent = ({ onSelectImage }) => {
-    const [selectedImage, setSelectedImage] = useState(null);
+const ImageComponent = ({ onImageSelect }) => {
+    const navigation = useNavigation()
+    const [selectedImage, setSelectedImage] = useState('');
 
     const onSelect = () => {
         const options = {
@@ -20,6 +23,7 @@ const ImageComponent = ({ onSelectImage }) => {
             } else {
                 let imageUri = response.uri || response.assets?.[0]?.uri;
                 setSelectedImage(imageUri);
+                onImageSelect(imageUri);
             }
         });
     };

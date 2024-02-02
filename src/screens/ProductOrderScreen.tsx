@@ -13,19 +13,39 @@ import { colors } from '../constants/Colors'
 import { Api } from './Api'
 import { useDispatch, useSelector } from 'react-redux'
 import commonAction from '../redux/action/commonAction'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const ProductOrderScreen = () => {
     const navigation = useNavigation()
-    const [formData, setFormData] = useState({ name: '', email: '', phone: '', productId: "", image: [], addressLine1: {}, addressLine2: {} })
+    const [formData, setFormData] = useState({ name: '', email: '', phoneNumber: '', productIds: "", image: [], addressLine1: "", addressLine2: "", comments: "" })
     const [productlist, setProductlist] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [errors, setErrors] = useState({})
     const dispatch = useDispatch()
-    const { token } = useSelector((state) => state?.commonReducer)
+    const { token, userDetails } = useSelector((state) => state?.commonReducer);
 
+    console.log("userdetailss===>", userDetails);
+
+    // console.log("formData====>", formData);
     const handleProductSelect = (productId) => {
         setSelectedProduct(productId);
+        setFormData((prev) => ({
+            ...prev,
+            productIds: [productId],
+        }));
     };
+
+    const handleInputChange = (fieldKey, text) => {
+        setFormData((prev) => ({ ...prev, [fieldKey]: text }));
+        if (errors[fieldKey]) {
+            setErrors((prevErrors) => ({ ...prevErrors, [fieldKey]: '' }));
+        }
+    };
+
+    useEffect(() => {
+        if (userDetails) {
+            setFormData((prevContacts) => ({ ...prevContacts, name: userDetails.name, email: userDetails.email }));
+        }
+    }, [userDetails]);
 
     const getTotalPrice = () => {
         const product = productlist.data.find(item => item._id === selectedProduct);
@@ -63,22 +83,24 @@ const ProductOrderScreen = () => {
     };
 
     const formFields = [
-        { label: 'Name', stateKey: 'childname', component: <TextInputComponent placeholder="Enter your name" onChangeText={(text) => handleTextChange('childname', text)} /> },
-        { label: 'Email', stateKey: 'message', component: <TextInputComponent placeholder="Enter your email" onChangeText={(text) => handleTextChange('email', text)} /> },
-        { label: 'Phone number', stateKey: 'message', component: <TextInputComponent placeholder="Phone number" onChangeText={(text) => handleTextChange('phone', text)} /> },
+        { label: 'Name', stateKey: 'childname', component: <TextInputComponent placeholder="Enter your name" value={userDetails.name} onChangeText={(text) => handleTextChange('childname', text)} /> },
+        { label: 'Email', stateKey: 'message', component: <TextInputComponent placeholder="Enter your email" value={userDetails.email} onChangeText={(text) => handleTextChange('email', text)} /> },
+        { label: 'Phone number', stateKey: 'message', component: <TextInputComponent placeholder="Phone number" onChangeText={(text) => handleTextChange('phoneNumber', text)} /> },
         { label: 'Choose product', stateKey: 'image', component: <ChooseprdctComponent productList={productlist} onSelect={handleProductSelect} /> },
-        { label: 'Upload image', stateKey: 'image', component: <ImageComponent /> },
+        { label: 'Upload image', stateKey: 'image', component: <ImageComponent onImageSelect={(imageUri) => handleInputChange('image', imageUri)} /> },
         { label: 'Address', stateKey: 'phone', component: <TextInputComponent placeholder="Address line 1" onChangeText={(text) => handleTextChange('addressLine1', text)} /> },
         { stateKey: 'phone', component: <TextInputComponent placeholder="Address line 2" onChangeText={(text) => handleTextChange('addressLine2', text)} /> },
+        { label: 'Any special request ?', stateKey: 'phone', component: <TextInputComponent placeholder="Any special request?" onChangeText={(text) => handleTextChange('message', text)} containerStyle={{ height: HEIGHT * 0.1 }} /> },
     ];
 
     const createOrder = async () => {
-        const { name, email, phone, image, addressLine1, addressLine2, productId } = formData;
+        const { name, email, phoneNumber, image, addressLine1, addressLine2, productIds, parentId } = formData;
         try {
             const response = await fetch(`${Api}/orders`, {
                 method: "POST",
                 body: JSON.stringify({
-                    name, email, image, phone, addressLine1, addressLine2, productId
+                    parentId: userDetails._id,
+                    name, email, image, phoneNumber, addressLine1, addressLine2, productIds
                 }),
                 headers: {
                     "Content-Type": "application/json",
@@ -88,7 +110,7 @@ const ProductOrderScreen = () => {
             if (response.status) {
                 const token = data?.data?.token;
                 if (token) {
-                    dispatch(commonAction.createOrder(token));
+                    dispatch(commonAction.createOrder(formData));
                     navigation.navigate('OrderHistoryDrawer');
                 }
             } else {
@@ -99,7 +121,6 @@ const ProductOrderScreen = () => {
             console.log("Error:", error);
         }
     }
-
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white }}>

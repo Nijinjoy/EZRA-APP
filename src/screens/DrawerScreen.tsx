@@ -15,7 +15,7 @@ const DATA = [
         title: 'Children',
         icon: drawerProfile,
         arrow: drawerArrow,
-        path: 'ChildrenScreen'
+        path: 'ChildrenDrawer'
     },
     {
         id: 2,
@@ -36,7 +36,7 @@ const DATA = [
         title: 'Faqs',
         icon: faq,
         arrow: drawerArrow,
-        path: 'FaqScreen'
+        path: 'FaqDrawer'
     },
     {
         id: 5,
@@ -57,7 +57,7 @@ const DATA = [
         title: 'Order History',
         icon: history,
         arrow: drawerArrow,
-        path: 'OrderHistoryScreen'
+        path: 'OrderHistoryDrawer'
     }
 ]
 

@@ -17,6 +17,9 @@ const HomeScreen = () => {
     const [userData, setUserData] = useState([]);
     const { userDetails, addChild } = useSelector((state) => state?.commonReducer)
 
+    console.log("addChild====>", addChild);
+
+
     return (
         <View style={{ borderWidth: 0.5, borderColor: colors.lightBlue }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.143, borderWidth: 0 }}>
@@ -26,14 +29,6 @@ const HomeScreen = () => {
             </ImageBackground>
             <View style={{ marginHorizontal: WIDTH * 0.05 }}>
                 <View style={{ borderWidth: 0 }}>
-                    {/* {userDetails.name && <Text style={{ fontSize: 18, color: colors.darkViolet }}>{`Welcome, ${userDetails.name}`}</Text>}
-                    {children.length > 0 && (
-                        <ScrollView horizontal>
-                            {children.map((child, index) => (
-                                <Text key={index}>{child.name}</Text>
-                            ))}
-                        </ScrollView>
-                    )} */}
                     <Text style={{ fontSize: 13, color: colors.lightGrey, fontWeight: "600" }}>Welcome</Text>
                     <Text style={{ fontSize: 18, color: colors.darkViolet }}>{userDetails.name}</Text>
                 </View>
@@ -47,7 +42,7 @@ const HomeScreen = () => {
             </View>
 
             <Modal visible={isModalVisible} animationType="slide" transparent >
-                <Pressable style={{ flex: 1 }} /* onPress={closeModal} */  >
+                <Pressable style={{ flex: 1 }}   >
                     <View style={{ backgroundColor: colors.white, borderWidth: 0, borderTopLeftRadius: WIDTH * 0.05, borderTopRightRadius: WIDTH * 0.05, justifyContent: 'flex-end', alignItems: "center", position: 'absolute', bottom: 0, width: WIDTH }}>
                         <View style={{ position: 'absolute', top: HEIGHT * 0.01, right: WIDTH * 0.05 }}>
                             <Text style={{ fontSize: 25 }}>*</Text>
@@ -72,3 +67,5 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen
+
+// there is a need to add more details about the registered user, so we navigate to addchildscreen and fills name, gender and dob of the registered user and we click handleAddChild from addchild screen to navigate back to homescreen and display the user name in  <Text style={{ fontSize: 18, color: colors.darkViolet }}>{userDetails.name}</Text>

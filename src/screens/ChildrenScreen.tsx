@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Image, ImageBackground, FlatList, TouchableOpacity, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, Pressable, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { addIcon, backArrow, contact, plusIcon, profileIcon, shadedIcon } from '../assets/images'
@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useSelector } from 'react-redux'
 
 const data1 = [
     {
@@ -21,45 +22,16 @@ const data1 = [
     {
         id: 3,
         name: 'Ajo',
-        background: colors.violet
+        background: colors.violet,
     },
 ]
-
 
 const ChildrenScreen = () => {
     const Navigation = useNavigation()
     const [childrenNames, setChildrenNames] = useState([]);
+    const { userDetails } = useSelector((state) => state?.commonReducer);
 
-    useEffect(() => {
-        const fetchChildrenNames = async () => {
-            try {
-                const storedNames = await AsyncStorage.getItem('childNames');
-                if (storedNames) {
-                    setChildrenNames(JSON.parse(storedNames));
-                }
-            } catch (error) {
-                console.error('Error fetching children names:', error);
-            }
-        };
-        fetchChildrenNames();
-    }, []);
-
-
-    const handleAddChild = async () => {
-        try {
-            const result = await Navigation.navigate('AddChildScreen', {
-                title: 'Update Child',
-                buttonText: 'Update',
-            });
-            if (result) {
-                setChildrenNames((prevNames) => [...prevNames, result]);
-                const updatedChildrenNames = [...childrenNames, result];
-                await AsyncStorage.setItem('childNames', JSON.stringify(updatedChildrenNames))
-            }
-        } catch (error) {
-            console.error('Error navigating to AddChildScreen:', error);
-        }
-    };
+    console.log("userdetails===>", userDetails);
 
     return (
         <View style={{ flex: 1, margin: HEIGHT * 0.01 }}>
@@ -68,14 +40,48 @@ const ChildrenScreen = () => {
                     <HeaderComponent title="Children" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <View style={{ justifyContent: "center", alignItems: 'center', flex: 1 }}>
+            <View style={{ borderWidth: 0 }}>
 
             </View>
-        </View >
+        </View>
     )
 }
 
 export default ChildrenScreen
+
+
+// const [childrenNames, setChildrenNames] = useState([]);
+
+// useEffect(() => {
+//     const fetchChildrenNames = async () => {
+//         try {
+//             const storedNames = await AsyncStorage.getItem('childNames');
+//             if (storedNames) {
+//                 setChildrenNames(JSON.parse(storedNames));
+//             }
+//         } catch (error) {
+//             console.error('Error fetching children names:', error);
+//         }
+//     };
+//     fetchChildrenNames();
+// }, []);
+
+
+// const handleAddChild = async () => {
+//     try {
+//         const result = await Navigation.navigate('AddChildScreen', {
+//             title: 'Update Child',
+//             buttonText: 'Update',
+//         });
+//         if (result) {
+//             setChildrenNames((prevNames) => [...prevNames, result]);
+//             const updatedChildrenNames = [...childrenNames, result];
+//             await AsyncStorage.setItem('childNames', JSON.stringify(updatedChildrenNames))
+//         }
+//     } catch (error) {
+//         console.error('Error navigating to AddChildScreen:', error);
+//     }
+// };
 
 
 {/* <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.05 }}>

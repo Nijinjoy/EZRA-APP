@@ -1,6 +1,6 @@
+import { contact } from "../../assets/images"
 import { Api } from "../../screens/Api"
-import { SET_TOKEN, SET_PROFILE, ADD_CHILD, CREATE_ORDER } from "../constants"
-
+import { SET_TOKEN, SET_PROFILE, ADD_CHILD, CREATE_ORDER, CONTACT_THERAPIST } from "../constants"
 
 
 const setToken = (payload = "") => {
@@ -33,10 +33,21 @@ const getUserProfile = (token) => {
     }
 }
 
+// const addChild = (childInfo) => {
+//     return {
+//         type: 'ADD_CHILD',
+//         payload: childInfo,
+//     };
+// };
+
 const addChild = (childInfo) => {
-    return {
-        type: 'ADD_CHILD',
-        payload: childInfo,
+    return async (dispatch, getState) => {
+        const { token } = getState().authReducer;
+        dispatch({
+            type: ADD_CHILD,
+            payload: childInfo,
+        });
+        dispatch(getUserProfile(token));
     };
 };
 
@@ -47,6 +58,14 @@ const createOrder = (formData) => {
     }
 }
 
+const contactTherapist = (contacts) => {
+    return {
+        type: 'CONTACT_THERAPIST',
+        payload: contacts
+    }
+}
+
+
 export default {
-    setToken, getUserProfile, addChild, createOrder
+    setToken, getUserProfile, addChild, createOrder, contactTherapist
 }
