@@ -41,5 +41,6 @@ import draw1 from '../images/draw1/draw1.png'
 import toggle2 from '../images/toggle2/toggle2.png'
 import call from '../images/call/call.png'
 import history from '../images/history/history.png'
+import profile from '../images/profile/profile.png'
 
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history, profile }

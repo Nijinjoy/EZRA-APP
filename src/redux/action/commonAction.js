@@ -1,6 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { contact } from "../../assets/images"
 import { Api } from "../../screens/Api"
-import { SET_TOKEN, SET_PROFILE, ADD_CHILD, CREATE_ORDER, CONTACT_THERAPIST } from "../constants"
+import { SET_TOKEN, SET_PROFILE, ADD_CHILD, CREATE_ORDER, CONTACT_THERAPIST, UPDATE_CHILD_DETAILS, UPDATE_USER_DETAILS } from "../constants"
 
 
 const setToken = (payload = "") => {
@@ -9,6 +10,7 @@ const setToken = (payload = "") => {
             type: SET_TOKEN,
             payload
         })
+        dispatch(getUserProfile(payload));
     }
 }
 
@@ -33,23 +35,26 @@ const getUserProfile = (token) => {
     }
 }
 
-// const addChild = (childInfo) => {
-//     return {
-//         type: 'ADD_CHILD',
-//         payload: childInfo,
-//     };
-// };
-
 const addChild = (childInfo) => {
-    return async (dispatch, getState) => {
-        const { token } = getState().authReducer;
-        dispatch({
-            type: ADD_CHILD,
-            payload: childInfo,
-        });
-        dispatch(getUserProfile(token));
+    return {
+        type: 'ADD_CHILD',
+        payload: childInfo,
     };
 };
+
+// const addChild = (childInfo) => {
+//     return async (dispatch) => {
+//         try {
+//             await AsyncStorage.setItem('childInfo', JSON.stringify(childInfo));
+//             dispatch({
+//                 type: ADD_CHILD,
+//                 payload: childInfo,
+//             });
+//         } catch (error) {
+//             console.error('Error adding child:', error);
+//         }
+//     };
+// };
 
 const createOrder = (formData) => {
     return {
@@ -64,7 +69,6 @@ const contactTherapist = (contacts) => {
         payload: contacts
     }
 }
-
 
 export default {
     setToken, getUserProfile, addChild, createOrder, contactTherapist

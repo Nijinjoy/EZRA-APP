@@ -61,7 +61,6 @@ const DATA = [
     }
 ]
 
-
 const DrawerScreen = () => {
     const navigation = useNavigation()
     const { userDetails } = useSelector((state) => state?.commonReducer)
@@ -79,7 +78,6 @@ const DrawerScreen = () => {
             console.error('Error removing user token:', error);
         }
     };
-
 
     return (
         <View style={{ flex: 1 }}>

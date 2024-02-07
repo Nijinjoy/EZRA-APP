@@ -29,7 +29,6 @@ const FaqScreen = () => {
         fetchData();
     }, []);
 
-
     const handleQuestionPress = (id) => {
         setSelectedQuestion(selectedQuestion === id ? null : id);
     };

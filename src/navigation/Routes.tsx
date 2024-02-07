@@ -63,24 +63,3 @@ const Routes = () => {
 }
 
 export default Routes
-
-
-// const Drawers = () => {
-//     return (
-//         <Drawer.Navigator drawerContent={props => <DrawerScreen {...props} />}
-//             screenOptions={{
-//                 headerShown: false, overlayColor: "transparent", drawerStyle: { width: WIDTH * 0.75 }
-//             }} initialRouteName='HomeScreen' >
-//             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
-//             <Drawer.Screen name='ChildrenScreen' component={ChildrenScreen} />
-//             <Drawer.Screen name='ExploreScreen' component={ExploreScreen} />
-//             <Drawer.Screen name='FaqScreen' component={FaqScreen} />
-//             <Drawer.Screen name=' ContactScreen' component={ContactScreen} />
-//             <Drawer.Screen name='OrderHistoryScreen' component={OrderHistoryScreen} />
-//             <Drawer.Screen name='OrderDetailsScreen' component={OrderDetailsScreen} />
-//             <Drawer.Screen name='DrawingsScreen' component={DrawingsScreen} />
-//             <Drawer.Screen name='ProductOrderScreen' component={ProductOrderScreen} />
-//             <Drawer.Screen name='AddChildScreen' component={AddChildScreen} />
-//         </Drawer.Navigator>
-//     )
-// }

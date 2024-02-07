@@ -1,4 +1,4 @@
-import { ADD_CHILD, SET_PROFILE, SET_TOKEN, CREATE_ORDER, CONTACT_THERAPIST } from "../constants";
+import { ADD_CHILD, SET_PROFILE, SET_TOKEN, CREATE_ORDER, CONTACT_THERAPIST, UPDATE_CHILD_DETAILS } from "../constants";
 
 const initialState = {
     token: "",
@@ -10,7 +10,6 @@ const initialState = {
 }
 
 const commonReducer = (state = initialState, action) => {
-    // console.log("token.payload==>", action.payload)
     switch (action.type) {
         case SET_TOKEN:
             return {
@@ -23,7 +22,7 @@ const commonReducer = (state = initialState, action) => {
                 userDetails: action.payload
             }
         case ADD_CHILD:
-            console.log("createOrder.payload===>", action.payload)
+            console.log("action.payload===>", action.payload);
             return {
                 ...state,
                 addChild: action.payload
@@ -34,7 +33,6 @@ const commonReducer = (state = initialState, action) => {
                 createOrder: action.payload,
             }
         case CONTACT_THERAPIST:
-            // console.log("createOrder.payload===>", action.payload)
             return {
                 ...state,
                 contactTherapist: action.payload
@@ -43,6 +41,5 @@ const commonReducer = (state = initialState, action) => {
             return state
     }
 }
-
 
 export default commonReducer

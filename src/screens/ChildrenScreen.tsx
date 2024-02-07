@@ -1,56 +1,46 @@
-import { View, Text, SafeAreaView, ImageBackground, Pressable, } from 'react-native'
+import { View, Text, SafeAreaView, ImageBackground, Pressable, Image, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
-import { addIcon, backArrow, contact, plusIcon, profileIcon, shadedIcon } from '../assets/images'
+import { addIcon, backArrow, contact, plusIcon, profile, profileIcon, shadedIcon } from '../assets/images'
 import { useNavigation } from '@react-navigation/native'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import { colors } from '../constants/Colors'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useSelector } from 'react-redux'
 
-const data1 = [
-    {
-        id: 1,
-        name: 'Nijin',
-        background: colors.skyBlue
-    },
-    {
-        id: 2,
-        name: 'Nijo',
-        background: colors.titleColor
-    },
-    {
-        id: 3,
-        name: 'Ajo',
-        background: colors.violet,
-    },
-]
-
 const ChildrenScreen = () => {
     const Navigation = useNavigation()
-    const [childrenNames, setChildrenNames] = useState([]);
-    const { userDetails } = useSelector((state) => state?.commonReducer);
+    const { addChild } = useSelector((state) => state?.commonReducer);
 
-    console.log("userdetails===>", userDetails);
 
     return (
-        <View style={{ flex: 1, margin: HEIGHT * 0.01 }}>
+        <View style={{ margin: HEIGHT * 0.01, flex: 1 }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1 }}>
                 <SafeAreaView style={{ marginTop: HEIGHT * 0.04 }}>
                     <HeaderComponent title="Children" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <View style={{ borderWidth: 0 }}>
+            <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.2 }}>
+                <View style={{ borderWidth: 0, alignItems: "center", justifyContent: 'center', width: WIDTH * 0.32, height: HEIGHT * 0.19, borderRadius: WIDTH * 0.02, backgroundColor: colors.orange }}>
+                    <Image source={profile} style={{ width: WIDTH * 0.15, height: HEIGHT * 0.1 }} resizeMode='contain' />
+                    <Text style={{ color: colors.white, fontSize: 15, margin: HEIGHT * 0.01 }}>{addChild.childname}</Text>
+                </View>
 
             </View>
         </View>
     )
 }
 
+
 export default ChildrenScreen
 
+{/* <View style={{ borderWidth: 0, alignItems: "center", justifyContent: 'center', width: WIDTH * 0.32, height: HEIGHT * 0.19, borderRadius: WIDTH * 0.02, backgroundColor: colors.orange }}>
+<Image source={profile} style={{ width: WIDTH * 0.15, height: HEIGHT * 0.1 }} resizeMode='contain' />
+<Text style={{ color: colors.white, fontSize: 15, margin: HEIGHT * 0.01 }}>{addChild.childname}</Text>
+</View> */}
 
 // const [childrenNames, setChildrenNames] = useState([]);
+
 
 // useEffect(() => {
 //     const fetchChildrenNames = async () => {

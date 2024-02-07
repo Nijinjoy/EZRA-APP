@@ -16,20 +16,20 @@ const Data = [
         id: 1,
         label: "Name",
         placeholder: "User name",
-        key: "Name"
+        key: "name"
     },
     {
         id: 2,
         label: "Email",
         placeholder: "Email address",
-        key: "Email"
+        key: "email"
     },
     {
         id: 3,
         label: "Password",
         placeholder: "Password",
         img: eye,
-        key: "Password",
+        key: "password",
         secureTextEntry: true,
         togglePassword: true
     },
@@ -46,7 +46,10 @@ const Data = [
 const SignUpScreen = () => {
     const navigation = useNavigation()
     const [error, setError] = useState("");
-    const [formData, setFormData] = useState({ Email: "", Password: "", Name: "" })
+    // const [formData, setFormData] = useState({ Email: "", Password: "", Name: "" })
+    const [formData, setFormData] = useState({ email: "", password: "", name: "" })
+
+    console.log("formdata==>", formData);
 
     const handleState = (key, val) => {
         error[key] = ""
@@ -55,7 +58,7 @@ const SignUpScreen = () => {
         setFormData({ ...formData })
     }
 
-    const onRegister = async () => {
+    const onRegister = async (token) => {
         const { email, password, name } = formData;
         try {
             var body = new FormData();
@@ -78,8 +81,8 @@ const SignUpScreen = () => {
                 const token = data?.data?.token;
                 if (token) {
                     await AsyncStorage.setItem('token', token);
-                    console.log("User successfully registered. Token:", token);
-                    navigation.navigate('HomeScreen', {
+                    console.log("User registered.token===>", token);
+                    navigation.navigate('Drawers', {
                         name: name,
                         email: email,
                     })
@@ -140,5 +143,6 @@ const SignUpScreen = () => {
         </ScrollView>
     )
 }
+
 
 export default SignUpScreen

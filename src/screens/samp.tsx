@@ -1,67 +1,47 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { addChild } from '../redux/actions';
+import { View, Text, SafeAreaView, ImageBackground, Pressable, Image, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import HeaderComponent from '../components/HeaderComponent'
+import { addIcon, backArrow, contact, plusIcon, profile, profileIcon, shadedIcon } from '../assets/images'
+import { useNavigation } from '@react-navigation/native'
+import { HEIGHT, WIDTH } from '../constants/Dimensions'
+import { colors } from '../constants/Colors'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useSelector } from 'react-redux'
 
-const AddChildScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
+const ChildrenScreen = () => {
+    const Navigation = useNavigation()
+    const { addChild } = useSelector((state) => state?.commonReducer);
+    const [childList, setChildList] = useState([]);
 
-    const handleAddChild = (childDetails) => {
-        // Assuming childDetails contains the name, gender, and dob of the child
-        dispatch(addChild(childDetails));
-        navigation.navigate('HomeScreen');
-    };
+    useEffect(() => {
+        // Fetch child data from AsyncStorage or Redux store
+        // Example: AsyncStorage.getItem('childList').then((data) => setChildList(JSON.parse(data || '[]')));
+    }, []);
 
-    return (
-        <View>
-            {/* Your UI for adding child details */}
-            <Text>Add Child Details</Text>
-            {/* Example button to trigger handleAddChild */}
-            <Button
-                title="Add Child"
-                onPress={() => handleAddChild({ name: 'John', gender: 'Male', dob: '01/01/2022' })}
-            />
+    const renderItem = ({ item }) => (
+        <View style={{ borderWidth: 0, alignItems: "center", justifyContent: 'center', width: WIDTH * 0.32, height: HEIGHT * 0.19, borderRadius: WIDTH * 0.02, backgroundColor: colors.orange }}>
+            <Image source={profile} style={{ width: WIDTH * 0.15, height: HEIGHT * 0.1 }} resizeMode='contain' />
+            <Text style={{ color: colors.white, fontSize: 15, margin: HEIGHT * 0.01 }}>{item.childname}</Text>
         </View>
     );
-};
 
-export default AddChildScreen;
+    return (
+        <View style={{ margin: HEIGHT * 0.01, flex: 1 }}>
+            <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.1 }}>
+                <SafeAreaView style={{ marginTop: HEIGHT * 0.04 }}>
+                    <HeaderComponent title="Children" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                </SafeAreaView>
+            </ImageBackground>
+            <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.2 }}>
+                <FlatList
+                    data={childList}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()} // Assuming each child has a unique ID
+                    horizontal={false} // Set to true if you want horizontal scrolling
+                />
+            </View>
+        </View>
+    )
+}
 
-import { SET_TOKEN, ADD_CHILD } from './constants';
-
-export const addChild = (childDetails) => ({
-    type: ADD_CHILD,
-    payload: childDetails,
-});
-
-
-
-
-import { ADD_CHILD } from '../constants';
-
-const initialState = {
-    userDetails: {
-        // Initial user details
-        name: 'Initial User',
-        // ...other fields
-    },
-};
-
-const commonReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case ADD_CHILD:
-            return {
-                ...state,
-                userDetails: {
-                    ...state.userDetails,
-                    // Update the name field with the new child's name
-                    name: action.payload.name,
-                },
-            };
-        // ...other cases
-        default:
-            return state;
-    }
-};
-
-export default commonReducer;
+export default ChildrenScreen;

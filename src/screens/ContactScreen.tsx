@@ -35,7 +35,6 @@ const ContactScreen = () => {
         }
     }, [userDetails]);
 
-
     const formFields = [
         { label: 'Select child', stateKey: 'childId', component: <TextInputComponent placeholder="Choose from list" value={userDetails.name} onChangeText={(text) => handleInputChange('childId', text)} icon={downArrow} /> },
         { label: 'Message', stateKey: 'message', component: <TextInputComponent placeholder="Ask a question" containerStyle={{ height: HEIGHT * 0.1 }} value={contacts.message} onChangeText={(text) => handleInputChange('message', text)} /> },

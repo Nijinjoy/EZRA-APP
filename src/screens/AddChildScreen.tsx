@@ -15,13 +15,14 @@ import commonAction from '../redux/action/commonAction';
 import { useSelector } from 'react-redux';
 import { Api } from './Api';
 
+
 const AddChildScreen = () => {
     const navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [childInfo, setChildInfo] = useState({ name: '', gender: 'Male', dob: '' })
+    const [childInfo, setChildInfo] = useState({ childname: '', gender: 'Male', dob: '', parentId: "" })
     const dispatch = useDispatch()
 
-    console.log("childInfo===?>", childInfo);
+    console.log("childinfo===>", childInfo);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -30,7 +31,6 @@ const AddChildScreen = () => {
     const hideDatePicker = () => {
         setDatePickerVisibility(false)
     };
-
 
     const handleDatePicked = (pickedDate) => {
         hideDatePicker();
@@ -52,22 +52,23 @@ const AddChildScreen = () => {
         }));
     };
 
-    const handleNameChange = (name) => {
+    const handleNameChange = (childname) => {
         setChildInfo(prevInfo => ({
             ...prevInfo,
-            name: name
+            childname: childname
         }));
     };
 
     const handleAddChild = async () => {
-        const { name, gender, dob } = childInfo
+        const { childname, gender, dob, parentId } = childInfo
         try {
             const response = await fetch(`${Api}/child/addChild`, {
                 method: "POST",
                 body: JSON.stringify({
-                    name: name,
+                    childname: childname,
                     gender: gender,
                     dob: dob,
+                    parentId: parentId
                 }),
                 headers: {
                     "Content-Type": "application/json",
@@ -75,6 +76,7 @@ const AddChildScreen = () => {
             })
             if (response.status) {
                 dispatch(commonAction.addChild(childInfo));
+                await AsyncStorage.setItem('childName', name);
                 navigation.navigate('HomeScreen');
             } else {
                 Alert.alert('Error', 'Failed to add child');

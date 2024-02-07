@@ -25,7 +25,6 @@ const ProductOrderScreen = () => {
 
     console.log("userdetailss===>", userDetails);
 
-    // console.log("formData====>", formData);
     const handleProductSelect = (productId) => {
         setSelectedProduct(productId);
         setFormData((prev) => ({
@@ -74,6 +73,7 @@ const ProductOrderScreen = () => {
     useEffect(() => {
         fetchProducts(token);
     }, [token]);
+
 
     const handleTextChange = (key, text) => {
         setFormData(prevData => ({
