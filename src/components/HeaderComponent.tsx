@@ -5,18 +5,18 @@ import { backArrow } from '../assets/images'
 import { colors } from '../constants/Colors'
 
 const HeaderComponent = (props) => {
-    const { title, backArrow, fontsize, navigation, Width, Height } = props
+    const { title, backArrow, fontsize, navigation, imageWidth, imageHeight } = props;
     return (
-        <View style={{ flexDirection: 'row', height: HEIGHT * 0.06, borderWidth: 0 }}>
-            <Pressable onPress={navigation} style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
-                <Image source={backArrow} resizeMode='contain' style={{ width: Width, height: Height }} />
+        <View style={{ flexDirection: 'row', height: HEIGHT * 0.06 }}>
+            <Pressable onPress={navigation} style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+                <Image source={backArrow} resizeMode='contain' style={{ width: imageWidth, height: imageHeight }} />
             </Pressable>
-            <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center', borderWidth: 0 }}>
+            <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontSize: fontsize, color: colors.titleColor, fontWeight: '500', textAlign: 'center' }}>{title}</Text>
             </View>
-            <Pressable style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
+            {/* <Pressable style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
                 <Text>{ }</Text>
-            </Pressable >
+            </Pressable > */}
         </View>
     )
 }

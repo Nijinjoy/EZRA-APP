@@ -15,14 +15,12 @@ import commonAction from '../redux/action/commonAction';
 import { useSelector } from 'react-redux';
 import { Api } from './Api';
 
-
 const AddChildScreen = () => {
     const navigation = useNavigation();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [childInfo, setChildInfo] = useState({ childname: '', gender: 'Male', dob: '', parentId: "" })
+    const [childInfo, setChildInfo] = useState({ childname: '', gender: 'Male', dob: '' })
+    const { userDetails, addChild, token, getUser } = useSelector((state) => state?.commonReducer);
     const dispatch = useDispatch()
-
-    console.log("childinfo===>", childInfo);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -60,24 +58,27 @@ const AddChildScreen = () => {
     };
 
     const handleAddChild = async () => {
-        const { childname, gender, dob, parentId } = childInfo
+        const { childname, gender, dob } = childInfo
+        const mappedGender = gender === 'Male' ? 'boy' : 'girl';
         try {
             const response = await fetch(`${Api}/child/addChild`, {
                 method: "POST",
                 body: JSON.stringify({
-                    childname: childname,
-                    gender: gender,
+                    name: childname,
+                    gender: mappedGender,
                     dob: dob,
-                    parentId: parentId
                 }),
                 headers: {
                     "Content-Type": "application/json",
+                    authorization: `Bearer ${token}`
                 }
             })
+            const responseJSON = await response.json()
+            console.log("add child===>", responseJSON);
             if (response.status) {
-                dispatch(commonAction.addChild(childInfo));
-                await AsyncStorage.setItem('childName', name);
-                navigation.navigate('HomeScreen');
+                // dispatch(commonAction.addChild(childInfo));
+                // await AsyncStorage.setItem('childInfo', JSON.stringify(childInfo));
+                navigation.navigate('HomeScreen', { childInfo: childInfo });
             } else {
                 Alert.alert('Error', 'Failed to add child');
             }
@@ -92,7 +93,7 @@ const AddChildScreen = () => {
         <View style={{ flex: 1, }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title="Add a Child" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => navigation.goBack()} fontsize={18} />
+                    <HeaderComponent title="Add a Child" backArrow={backArrow} imageWidth={WIDTH * 0.045} imageHeight={HEIGHT * 0.022} navigation={() => navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>

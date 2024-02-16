@@ -28,6 +28,7 @@ const ImageComponent = ({ onImageSelect }) => {
         });
     };
 
+
     return (
         <View style={{ borderWidth: 1, borderColor: colors.grey, flexDirection: 'row', borderRadius: WIDTH * 0.02, overflow: 'hidden' }}>
             <View style={{ flex: 0.7, margin: HEIGHT * 0.015, justifyContent: 'center', alignItems: "center", position: 'relative' }}>

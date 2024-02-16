@@ -12,7 +12,9 @@ const colors = {
     skyBlue: "#64A2FF",
     lightBlue: "#EFF3F8",
     blue: "#0088CE",
-    orange: "#F19054"
+    orange: "#F19054",
+    shadowGrey: "#EFF3F8",
+    borderColor: "#707070"
 }
 
 export { colors }

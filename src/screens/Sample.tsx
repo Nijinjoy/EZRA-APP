@@ -1,169 +1,138 @@
-import { View, Text, SafeAreaView, ImageBackground, SectionList, Pressable, Image, ScrollView, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import HeaderComponent from '../components/HeaderComponent'
-import { backArrow, cup, keyChain, shadedIcon } from '../assets/images'
-import { HEIGHT, WIDTH } from '../constants/Dimensions'
-import { useNavigation } from '@react-navigation/native'
+import { View, Text, ImageBackground, SafeAreaView, ScrollView, SectionList, Pressable, Image, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { colors } from '../constants/Colors'
+import { artwork, backArrow, draw1, equal, shadedIcon } from '../assets/images'
+import { HEIGHT, WIDTH } from '../constants/Dimensions'
+import HeaderComponent from '../components/HeaderComponent'
+import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Api } from './Api'
+import ToggleComponent from '../components/ToggleComponent'
 
 
-const OrderHistory1 = [
+const Drawings1 = [
     {
         id: 1,
-        orderid: '#123',
-        title: 'Tuesday,23rd January 2022',
-        icon: cup,
-        name: 'Custom cup print',
-        price: '20',
-        path: 'OrderDetailsScreen'
+        icon: artwork,
+        name: 'Dave',
+        percentage: "80% ",
+        status: 'Positive',
+        date: "12 September 2023"
     },
     {
         id: 2,
-        orderid: '#123',
-        title: 'Tuesday,23rd January 2022',
-        icon: keyChain,
-        name: 'Custom cup print',
-        price: '20',
-        path: 'OrderDetailsScreen'
-    }
+        icon: draw1,
+        name: 'Maya',
+        percentage: "80% ",
+        status: 'Negative',
+        date: "12 September 2023"
+    },
 ]
 
-const OrderHistory2 = [
+const Drawings2 = [
     {
         id: 1,
-        orderid: '#123',
-        title: 'Tuesday,23rd January 2022',
-        icon: keyChain,
-        name: 'Custom cup print',
-        price: '20',
-        path: 'OrderDetailsScreen'
+        icon: draw1,
+        name: 'Dave',
+        percentage: "80%",
+        status: 'Positive',
+        date: "12 September 2023"
     },
     {
         id: 2,
-        orderid: '#123',
-        title: 'Tuesday,23rd January 2022',
-        icon: cup,
-        name: 'Custom cup print',
-        price: '20',
-        path: 'OrderDetailsScreen'
+        icon: artwork,
+        name: 'Maya',
+        percentage: "80%",
+        status: 'Negative',
+        date: "12 September 2023"
     },
     {
         id: 3,
-        orderid: '#123',
-        icon: keyChain,
-        name: 'Custom cup print',
-        price: '20',
-        path: 'OrderDetailsScreen'
+        icon: draw1,
+        name: 'Dave',
+        percentage: "80%",
+        status: 'Negative',
+        date: "12 September 2023"
     },
     {
         id: 4,
-        orderid: "#123",
-        icon: keyChain,
-        name: "Custom cup print",
-        price: '30',
-        path: 'OrderDEtailsScreen'
-    }
+        icon: draw1,
+        name: 'Dave',
+        percentage: "80%",
+        status: 'Negative',
+        date: "12 September 2023"
+    },
 ]
 
 const OrderHistory = [
     {
-        title: 'Tuesday,23rd January 2022',
-        data: OrderHistory1,
+        title: '',
+        data: Drawings1
     },
     {
-        title: "Thursday,25th January 2022",
-        data: OrderHistory2
+        title: "January",
+        data: Drawings2
     }
 ]
 
-
-const OrderHistoryScreen = () => {
-    const [orderData, setOrderData] = useState([]);
-    const [loading, setLoading] = useState(true);
+const DrawingsScreen = () => {
     const Navigation = useNavigation()
 
+    const onSelectRow = () => {
+        Alert.alert('hii')
+    }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2JkNDkxN2UwOGE1MjA2MWFjNTk3NzIiLCJpc0FkbWluIjp0cnVlLCJyb2xlIjoic3RhZmYiLCJpYXQiOjE2NzMzNDk0MTZ9.D-347fvwGHtspHwYW6OlRD4eFdIGEDSdoL5Mm7XCKTY';
-
-                const response = await fetch('https://esra-dev.applab.qa/api/orders?page_no=7&item_per_page=23', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const responseData = await response.json();
-                if (responseData.status === true) {
-                    const formattedData = responseData.data.map(order => ({
-                        title: new Date(order.createdAt).toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            day: 'numeric',
-                            month: 'long',
-                            year: 'numeric',
-                        }),
-                        data: order.products.map(product => ({
-                            id: product._id,
-                            orderid: order._id,
-                            icon: { uri: product.image },
-                            name: product.title_en,
-                            price: product.price.toString(),
-                            path: 'OrderDetailsScreen',
-                        })),
-                    }));
-                    setOrderData(formattedData);
-                } else {
-                    setOrderData([]);
-                }
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-
+    const onSelectColumn = () => {
+        Alert.alert('hii')
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.white }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title="Order History" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                    <HeaderComponent title="Drawings" backArrow={backArrow} imageWidth={WIDTH * 0.045} imageHeight={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
+
+            <Pressable style={{ alignItems: 'flex-end', marginHorizontal: WIDTH * 0.05 }}>
+                <View style={{ borderWidth: 1, width: WIDTH * 0.2, padding: WIDTH * 0.02, borderColor: colors.grey, borderRadius: WIDTH * 0.01, backgroundColor: colors.grey, flexDirection: 'row' }}>
+                    <Pressable style={{ padding: WIDTH * 0.02, backgroundColor: colors.white }} onPress={onSelectRow}  >
+                        <Image source={equal} />
+                    </Pressable>
+                    <Pressable style={{ padding: WIDTH * 0.02, backgroundColor: colors.white, marginHorizontal: 5 }} onPress={onSelectColumn}  >
+                        <Image source={equal} />
+                    </Pressable>
+                </View>
+            </Pressable >
+
             <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
-                {orderData.length === 0 ? (
-                    <View style={{ justifyContent: 'center', alignItems: "center", flex: 1 }}>
-                        <Text style={{ textAlign: 'center', fontSize: 16, color: colors.blue, flex: 1, justifyContent: "center" }}>
-                            No data found
-                        </Text>
-                    </View>
-                ) : (
-                    <SectionList
-                        sections={orderData}
-                        keyExtractor={(item, index) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <Pressable style={{ flexDirection: 'row', margin: 10 }} onPress={() => Navigation.navigate('OrderDetailsScreen', { productDetails: item, title: item.title })}>
-                                <Image source={item.icon} style={{ width: WIDTH * 0.215, height: HEIGHT * 0.1 }} />
-                                <View style={{ flexDirection: "column", margin: HEIGHT * 0.01 }}>
-                                    <Text style={{ color: colors.lightGrey }}>Order ID {item.orderid.substring(0, 8)}</Text>
-                                    <Text style={{ fontSize: 15, color: colors.titleColor }}>{item.name}</Text>
-                                    <Text style={{ color: colors.blue, fontSize: 18, marginTop: HEIGHT * 0.01 }}>QAR <Text style={{ fontWeight: 'bold' }}>{item.price}</Text></Text>
-                                </View>
-                            </Pressable>
-                        )}
-                        renderSectionHeader={({ section: { title } }) => (
-                            <View style={{ marginHorizontal: WIDTH * 0.02, marginVertical: 6 }}>
-                                <Text style={{ fontSize: 15 }}>{title}</Text>
+                <SectionList
+                    sections={OrderHistory}
+                    keyExtractor={(item, index) => item + index}
+                    style={{ flexDirection: "row" }}
+                    scrollEnabled={true}
+                    renderItem={({ item }) => (
+                        <View style={{ flexDirection: "row", borderRadius: WIDTH * 0.03 }}>
+                            <View style={{ marginVertical: HEIGHT * 0.02, }}>
+                                <Image source={item.icon} style={{ width: WIDTH * 0.3, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} />
                             </View>
-                        )}
-                    />
-                )}
+                            <View style={{ marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.02 }}>
+                                <Text style={{ fontSize: 14, color: colors.darkViolet }}>{item.name}</Text>
+                                <Text style={{ fontSize: 40, color: colors.darkViolet }}>{item.percentage}</Text>
+                                <Text style={{ fontSize: 16, color: colors.orange }}>{item.status}</Text>
+                                <Text style={{ fontSize: 13, color: colors.darkViolet }}>12 March 2023</Text>
+                            </View>
+                        </View>
+                    )}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <View style={{ flexDirection: "row" }}>
+                            <Text style={{ fontSize: 16, color: colors.darkViolet, fontWeight: '600' }}>{title}</Text>
+                        </View>
+                    )}
+                />
             </ScrollView>
-        </View>
+        </View >
     )
 }
 
-export default OrderHistoryScreen
+export default DrawingsScreen

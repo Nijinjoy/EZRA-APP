@@ -36,7 +36,7 @@ const SplashScreen = () => {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: colors.lightwhite, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ flex: 1, backgroundColor: colors.lightWhite, justifyContent: "center", alignItems: "center" }}>
             <View style={{ width: WIDTH * 0.432, height: HEIGHT * 0.242, backgroundColor: colors.shadowWhite, borderRadius: WIDTH * 0.087, justifyContent: "center", alignItems: "center" }}>
                 <Image source={logoIcon} style={{ width: WIDTH * 0.267, height: HEIGHT * 0.15 }} resizeMode='contain' />
             </View>

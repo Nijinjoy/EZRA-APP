@@ -42,5 +42,10 @@ import toggle2 from '../images/toggle2/toggle2.png'
 import call from '../images/call/call.png'
 import history from '../images/history/history.png'
 import profile from '../images/profile/profile.png'
+import home from '../images/home/home.png'
+import dot from '../images/dot/dot.png'
+import prediction from '../images/prediction/prediction.png'
+import details from '../images/details/details.png'
+import equal from '../images/equal/equal.png'
 
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history, profile }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history, profile, home, dot, prediction, details, equal }

@@ -4,9 +4,9 @@ import { HEIGHT, WIDTH } from '../constants/Dimensions';
 import { eye } from '../assets/images';
 import { colors } from '../constants/Colors';
 
-const TextInputComponent = ({ icon, placeholder, onChangeText, value, onPress, isTextEnabled = true, keyboardType, Width }) => {
+const TextInputComponent = ({ icon, placeholder, onChangeText, value, onPress, isTextEnabled = true, keyboardType, Width, containerStyle }) => {
     return (
-        <View style={{ borderWidth: 1, borderColor: colors.grey, flexDirection: "row", alignItems: "center", justifyContent: 'center', borderRadius: WIDTH * 0.015, width: Width }}>
+        <View style={{ borderWidth: 1, borderColor: colors.grey, flexDirection: "row", alignItems: "center", justifyContent: 'center', borderRadius: WIDTH * 0.015, width: Width, ...containerStyle }}>
             <TextInput
                 value={value}
                 placeholder={placeholder}

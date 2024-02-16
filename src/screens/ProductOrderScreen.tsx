@@ -128,8 +128,8 @@ const ProductOrderScreen = () => {
                 <SafeAreaView>
                     <HeaderComponent title="Wear your emotions"
                         backArrow={backArrow}
-                        Width={WIDTH * 0.045}
-                        Height={HEIGHT * 0.022}
+                        imageWidth={WIDTH * 0.045}
+                        imageHeight={HEIGHT * 0.022}
                         navigation={() => navigation.goBack()}
                         fontsize={18}
                     />

@@ -1,31 +1,28 @@
-import { ADD_CHILD, SET_PROFILE, SET_TOKEN, CREATE_ORDER, CONTACT_THERAPIST, UPDATE_CHILD_DETAILS } from "../constants";
+import { SET_PROFILE, SET_TOKEN, CREATE_ORDER, CONTACT_THERAPIST, GET_USER, /* ADD_CHILD */ } from "../constants";
 
 const initialState = {
     token: "",
     userDetails: {},
-    addChild: {},
+    // addChild: {},
     formData: {},
     createOrder: {},
-    contactTherapist: {}
+    contactTherapist: {},
+    getUser: {}
 }
 
 const commonReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_TOKEN:
+            // console.log("token.payload===>", action.payload);
             return {
                 ...state,
                 token: action.payload
             }
         case SET_PROFILE:
-            return {
-                ...state,
-                userDetails: action.payload
-            }
-        case ADD_CHILD:
             console.log("action.payload===>", action.payload);
             return {
                 ...state,
-                addChild: action.payload
+                userDetails: action.payload
             }
         case CREATE_ORDER:
             return {
@@ -37,6 +34,18 @@ const commonReducer = (state = initialState, action) => {
                 ...state,
                 contactTherapist: action.payload
             }
+        case GET_USER:
+            console.log("getUsing====>", action.payload);
+            return {
+                ...state,
+                getUser: action.payload
+            }
+        // case ADD_CHILD:
+        //     console.log("action.payload===>", action.payload);
+        //     return {
+        //         ...state,
+        //         addChild: action.payload
+        //     }
         default:
             return state
     }

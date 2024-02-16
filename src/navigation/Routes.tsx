@@ -19,6 +19,7 @@ import ExploreScreen from '../screens/ExploreScreen';
 import OrderDetailsScreen from '../screens/OrderDetailsScreen';
 import DrawingsScreen from '../screens/DrawingsScreen';
 import ProductOrderScreen from '../screens/ProductOrderScreen';
+import DrawingOverview from '../screens/DrawingOverview';
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -44,6 +45,7 @@ const Drawers = () => {
             <Drawer.Screen name="DrawingsDrawer" component={DrawingsScreen} />
             <Drawer.Screen name="ProductOrderDrawer" component={ProductOrderScreen} />
             <Drawer.Screen name="AddChildDrawer" component={AddChildScreen} />
+            <Drawer.Screen name="DrawingOverviewDrawer" component={DrawingOverview} />
         </Drawer.Navigator>
     );
 };

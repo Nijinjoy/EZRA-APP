@@ -10,8 +10,7 @@ import { useSelector } from 'react-redux'
 
 const ChildrenScreen = () => {
     const Navigation = useNavigation()
-    const { addChild } = useSelector((state) => state?.commonReducer);
-
+    const { getUser } = useSelector((state) => state?.commonReducer);
 
     return (
         <View style={{ margin: HEIGHT * 0.01, flex: 1 }}>
@@ -21,10 +20,20 @@ const ChildrenScreen = () => {
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.2 }}>
-                <View style={{ borderWidth: 0, alignItems: "center", justifyContent: 'center', width: WIDTH * 0.32, height: HEIGHT * 0.19, borderRadius: WIDTH * 0.02, backgroundColor: colors.orange }}>
-                    <Image source={profile} style={{ width: WIDTH * 0.15, height: HEIGHT * 0.1 }} resizeMode='contain' />
-                    <Text style={{ color: colors.white, fontSize: 15, margin: HEIGHT * 0.01 }}>{addChild.childname}</Text>
-                </View>
+                <FlatList
+                    data={getUser}
+                    numColumns={4}
+                    contentContainerStyle={{ marginTop: HEIGHT * 0.01 }}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <View style={{ marginRight: WIDTH * 0.05 }}>
+                            <View style={{ borderWidth: 0, width: WIDTH * 0.19, height: HEIGHT * 0.108, borderRadius: WIDTH * 0.02, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.lightGrey }}>
+                                <Image source={profile} resizeMode='contain' style={{ width: WIDTH * 0.06, height: HEIGHT * 0.05 }} />
+                                <Text style={{ fontSize: 16, color: colors.white }}>{item.name}</Text>
+                            </View>
+                        </View>
+                    )}
+                />
 
             </View>
         </View>
@@ -33,66 +42,3 @@ const ChildrenScreen = () => {
 
 
 export default ChildrenScreen
-
-{/* <View style={{ borderWidth: 0, alignItems: "center", justifyContent: 'center', width: WIDTH * 0.32, height: HEIGHT * 0.19, borderRadius: WIDTH * 0.02, backgroundColor: colors.orange }}>
-<Image source={profile} style={{ width: WIDTH * 0.15, height: HEIGHT * 0.1 }} resizeMode='contain' />
-<Text style={{ color: colors.white, fontSize: 15, margin: HEIGHT * 0.01 }}>{addChild.childname}</Text>
-</View> */}
-
-// const [childrenNames, setChildrenNames] = useState([]);
-
-
-// useEffect(() => {
-//     const fetchChildrenNames = async () => {
-//         try {
-//             const storedNames = await AsyncStorage.getItem('childNames');
-//             if (storedNames) {
-//                 setChildrenNames(JSON.parse(storedNames));
-//             }
-//         } catch (error) {
-//             console.error('Error fetching children names:', error);
-//         }
-//     };
-//     fetchChildrenNames();
-// }, []);
-
-
-// const handleAddChild = async () => {
-//     try {
-//         const result = await Navigation.navigate('AddChildScreen', {
-//             title: 'Update Child',
-//             buttonText: 'Update',
-//         });
-//         if (result) {
-//             setChildrenNames((prevNames) => [...prevNames, result]);
-//             const updatedChildrenNames = [...childrenNames, result];
-//             await AsyncStorage.setItem('childNames', JSON.stringify(updatedChildrenNames))
-//         }
-//     } catch (error) {
-//         console.error('Error navigating to AddChildScreen:', error);
-//     }
-// };
-
-
-{/* <View style={{ justifyContent: "center", alignItems: "center", marginTop: HEIGHT * 0.05 }}>
-<FlatList
-    data={childrenNames}
-    numColumns={2}
-    keyExtractor={(item, index) => index.toString()}
-    renderItem={({ item }) => (
-        <View style={{ margin: WIDTH * 0.04 }}>
-            <Pressable style={{ flexDirection: 'row', width: WIDTH * 0.32, height: HEIGHT * 0.18, justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: item.background, borderRadius: WIDTH * 0.02 }}>
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Image source={contact} style={{ width: WIDTH * 0.2, height: HEIGHT * 0.08 }} resizeMode='contain' />
-                    <Text style={{ textAlign: 'center', marginTop: HEIGHT * 0.01, color: colors.white }}>{item.name}</Text>
-                </View>
-            </Pressable>
-        </View>
-    )}
-/>
-<Pressable onPress={handleAddChild} style={{ width: WIDTH * 0.32, height: HEIGHT * 0.18, backgroundColor: colors.grey, justifyContent: 'center', alignItems: 'center', marginHorizontal: WIDTH * 0.05, borderRadius: WIDTH * 0.02, }}>
-    <View style={{ padding: 5, borderRadius: WIDTH, width: WIDTH * 0.09, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.white }}>
-        <Text style={{ fontSize: 25 }}>+</Text>
-    </View>
-</Pressable>
-</View> */}

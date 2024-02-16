@@ -15,7 +15,9 @@ const DATA = [
         title: 'Children',
         icon: drawerProfile,
         arrow: drawerArrow,
-        path: 'ChildrenDrawer'
+        // path: 'ChildrenDrawer'
+        // path: 'DrawingsDrawer'
+        path: 'DrawingOverviewDrawer'
     },
     {
         id: 2,
@@ -29,7 +31,7 @@ const DATA = [
         title: 'Artworks',
         icon: drawingsIcon,
         arrow: drawerArrow,
-        path: 'DrawingsScreen'
+        path: 'DrawingsDrawer'
     },
     {
         id: 4,

@@ -36,3 +36,12 @@ const TextInputs = (props) => {
 }
 
 export default TextInputs;
+
+// {
+//     "childId": "63be7cae0c0d161298afeb14",
+//         "email": "ferferfrefre@dee.fe",
+//             "message": "fwdfwefwefewffew",
+//                 // "imageUrls":[{"image":"https://esra-bucket-applab-2.s3.me-south-1.amazonaws.com/17384df7-4cd6-40d5-a804-2bbad0c7742c.png","predictionId":"dvkdjvbvkjbfevfevfevefeev1"},{"image":"https://esra-bucket-applab-2.s3.me-south-1.amazonaws.com/17384df7-4cd6-40d5-a804-2bbad0c7742c.png","predictionId":"dvkdjvbvkjbfevfevfevefeev1"}],
+//                 "phoneNumber": "+97199956080"
+//     // "contactMethod":"Email"
+// }
