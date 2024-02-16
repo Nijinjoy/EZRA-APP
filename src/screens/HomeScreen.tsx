@@ -54,7 +54,7 @@ const HomeScreen = () => {
                 if (response.assets && response.assets.length > 0) {
                     try {
                         const selectedImage = response.assets[0];
-                        // console.log("selectedImage===>", selectedImage);
+                        console.log("selectedImage===>", selectedImage);
                         const fileExtension = selectedImage.fileName.split('.').pop();
                         const fileType = `.${fileExtension}`;
 
@@ -75,6 +75,31 @@ const HomeScreen = () => {
                         const data = await res.json();
                         if (data.status) {
                             console.log("Pre-signed URL:===>", data);
+
+                            const base64 = `data:${selectedImage.type};base64,${selectedImage.fileName}`;
+
+                            console.log("base64====>", base64);
+                            const blob = await (await fetch(base64)).blob();
+
+                            // console.log("base64====>", base64);
+
+
+                            // Upload the image using the obtained pre-signed URL
+                            const uploadResponse = await fetch(data.url, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': selectedImage.type,
+                                },
+                                body: blob,
+                                // body: selectedImage.fileName,
+                            });
+                            if (uploadResponse.status) {
+                                console.log('Image uploaded ===>', uploadResponse.status);
+                                Alert.alert('Successfully uploaded the image')
+                            } else {
+                                console.log('Failed to upload image:', uploadResponse.statusText);
+                            }
+                            // Upload the image using the obtained pre-signed URL
                         } else {
                             console.log('Failed to generate pre-signed URL:', data.message);
                         }
@@ -88,7 +113,7 @@ const HomeScreen = () => {
             }
         });
     };
-    // i want fetch a put api for uploading the image
+
 
     return (
         <View style={{ borderWidth: 0.5, borderColor: colors.lightBlue }}>
