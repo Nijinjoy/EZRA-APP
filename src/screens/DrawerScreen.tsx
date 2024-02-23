@@ -16,8 +16,8 @@ const DATA = [
         icon: drawerProfile,
         arrow: drawerArrow,
         // path: 'ChildrenDrawer'
-        // path: 'DrawingsDrawer'
-        path: 'DrawingOverviewDrawer'
+        path: 'AddChildDrawer'
+        // path: 'DrawingOverviewDrawer'
     },
     {
         id: 2,

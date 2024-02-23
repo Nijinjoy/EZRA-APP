@@ -47,5 +47,8 @@ import dot from '../images/dot/dot.png'
 import prediction from '../images/prediction/prediction.png'
 import details from '../images/details/details.png'
 import equal from '../images/equal/equal.png'
+import grid from '../images/grid/grid.png'
+import cont from '../images/cont/cont.png'
+import close from '../images/close/close.png'
 
-export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history, profile, home, dot, prediction, details, equal }
+export { logoIcon, bottomIntersection, getstartedIcon, topIntersection, nextArrow, cameraIcon, parabolicIcon, arrowIcon, blueIcon, signinIntersection, biometricIcon, eye, america, qatar, backArrow, calender, drawerIcon, shadedIcon, contact, drawerProfile, evaluateIcon, drawingsIcon, faq, drawerArrow, profileIcon, drawerShade, addIcon, downArrow, plusIcon, minus, cup, keyChain, english, arabic, cupp, shirt, artwork, camera, gallery, draw1, toggle2, call, history, profile, home, dot, prediction, details, equal, grid, cont, close }

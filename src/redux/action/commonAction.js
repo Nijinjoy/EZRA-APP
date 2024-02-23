@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Api } from "../../screens/Api"
-import { SET_TOKEN, SET_PROFILE, CREATE_ORDER, CONTACT_THERAPIST, UPDATE_CHILD_DETAILS, GET_USER } from "../constants"
+import { SET_TOKEN, SET_PROFILE, CREATE_ORDER, CONTACT_THERAPIST, UPDATE_CHILD_DETAILS, GET_USER, PREDICTION_CHILD } from "../constants"
 
 const accessToken = AsyncStorage.getItem("token")
 
@@ -36,7 +36,6 @@ const getUserProfile = (token, type) => {
 }
 
 const getUser = (token, type) => {
-    console.log("accessToke=>", accessToken);
     return async (dispatch) => {
         try {
             const response = await fetch(`${Api}/user/getUser`, {
@@ -47,11 +46,35 @@ const getUser = (token, type) => {
                 },
             })
             const responseJSON = await response.json()
-            console.log("response===>", responseJSON);
             dispatch({
                 type: GET_USER,
                 payload: responseJSON?.data
             })
+        } catch (err) {
+            console.log("err=>", err);
+        }
+    }
+}
+
+const getPredictionListChild = (_id, token) => {
+    return async (dispatch) => {
+        try {
+            const url = `${Api}/child/prediction/${_id}`
+            console.log("urlll====>", url);
+            console.log("tokennn=>", token);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    Accept: "application/json",
+                    authorization: `Bearer ${token}`
+                },
+            })
+            const responseJSON = await response.json();
+            dispatch({
+                type: PREDICTION_CHILD,
+                payload: responseJSON?.data,
+            })
+            console.log("response==>", JSON.stringify(responseJSON));
         } catch (err) {
             console.log("err=>", err);
         }
@@ -73,5 +96,5 @@ const contactTherapist = (contacts) => {
 }
 
 export default {
-    setToken, getUserProfile, createOrder, contactTherapist, getUser
+    setToken, getUserProfile, createOrder, contactTherapist, getUser, getPredictionListChild
 }

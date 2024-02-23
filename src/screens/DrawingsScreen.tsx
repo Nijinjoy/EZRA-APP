@@ -1,16 +1,16 @@
-import { View, Text, ImageBackground, SafeAreaView, ScrollView, Pressable, Image, FlatList } from 'react-native'
+import { View, Text, ImageBackground, SafeAreaView, ScrollView, Pressable, Image, FlatList, SectionList, Animated } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { colors } from '../constants/Colors'
-import { artwork, backArrow, draw1, equal, shadedIcon } from '../assets/images'
+import { artwork, backArrow, cont, contact, draw1, equal, grid, shadedIcon } from '../assets/images'
 import { HEIGHT, WIDTH } from '../constants/Dimensions'
 import HeaderComponent from '../components/HeaderComponent'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Api } from './Api'
 import ToggleComponent from '../components/ToggleComponent'
+import { useSelector } from 'react-redux'
 
-
-const Drawings2 = [
+const DATA = [
     {
         id: 1,
         icon: draw1,
@@ -21,7 +21,7 @@ const Drawings2 = [
     },
     {
         id: 2,
-        icon: artwork,
+        icon: draw1,
         name: 'Maya',
         percentage: "80%",
         status: 'Negative',
@@ -43,130 +43,97 @@ const Drawings2 = [
         status: 'Negative',
         date: "12 September 2023"
     },
-    {
-        id: 5,
-        icon: draw1,
-        name: 'Dave',
-        percentage: "80%",
-        status: 'Negative',
-        date: "12 September 2023"
-    },
-    {
-        id: 6,
-        icon: draw1,
-        name: 'Dave',
-        percentage: "80%",
-        status: 'Negative',
-        date: "12 September 2023"
-    },
 ]
-
-
 
 const DrawingsScreen = () => {
     const Navigation = useNavigation()
-    const [selectionMode, setSelectionMode] = useState('column');
+    const { userDetails, token, getUser, getPredictionListChild } = useSelector((state) => state?.commonReducer);
+    const [selectedFilter, setSelectedFilter] = useState('all');
+    const [selectedTab, setSelectedTab] = useState('grid')
 
-    const onSelectRow = () => {
+    const selectFilter = (filter) => {
+        setSelectedFilter(filter);
+    };
 
-    }
-
-    const onSelectColumn = () => {
-
+    const selectTab = (tab) => {
+        setSelectedTab(tab)
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: colors.white }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.white, }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
                     <HeaderComponent title="Drawings" backArrow={backArrow} imageWidth={WIDTH * 0.045} imageHeight={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
-            <Pressable style={{ alignItems: 'flex-end', marginHorizontal: WIDTH * 0.05 }}>
-                <View style={{ borderWidth: 1, width: WIDTH * 0.2, padding: WIDTH * 0.02, borderColor: colors.grey, borderRadius: WIDTH * 0.01, backgroundColor: colors.grey, flexDirection: 'row' }}>
-                    <Pressable style={{ padding: WIDTH * 0.02, backgroundColor: colors.white }} onPress={onSelectRow}  >
-                        <Image source={equal} />
+            {/* grid navigation */}
+            < View style={{ alignItems: 'flex-end', marginBottom: 10 }}>
+                <View style={{ flexDirection: "row", alignItems: 'center', marginHorizontal: WIDTH * 0.05, borderWidth: 0, backgroundColor: colors.grey, borderRadius: WIDTH * 0.01, }}>
+                    <Pressable onPress={() => selectTab('grid')} style={{ justifyContent: "center", alignItems: 'center', backgroundColor: selectedTab === 'grid' ? colors.white : colors.grey, margin: WIDTH * 0.01 }}>
+                        <Image source={grid} style={{ width: WIDTH * 0.05, height: HEIGHT * 0.03, marginHorizontal: WIDTH * 0.02 }} resizeMode='contain' />
                     </Pressable>
-                    <Pressable style={{ padding: WIDTH * 0.02, backgroundColor: colors.white, marginHorizontal: 5 }} onPress={onSelectColumn}  >
-                        <Image source={equal} />
+                    <Pressable onPress={() => selectTab('col')} style={{ justifyContent: "center", alignItems: 'center', backgroundColor: selectedTab === 'col' ? colors.white : colors.grey, margin: WIDTH * 0.01 }}>
+                        <Image source={equal} style={{ width: WIDTH * 0.04, height: HEIGHT * 0.03, marginHorizontal: WIDTH * 0.02 }} resizeMode='contain' />
                     </Pressable>
                 </View>
-            </Pressable>
-
-            {/* <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
-                <FlatList
-                    data={Drawings2}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => {
-                        return (
-                            <View style={{ borderWidth: 0, marginVertical: HEIGHT * 0.0, flexDirection: 'row' }}>
-                                <View style={{ marginVertical: HEIGHT * 0.01, }}>
-                                    <Image source={item.icon} style={{ width: WIDTH * 0.4, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} />
-                                </View>
-                                <View style={{ marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.02 }}>
-                                    <Text style={{ fontSize: 14, color: colors.darkViolet }}>{item.name}</Text>
-                                    <Text style={{ fontSize: 40, color: colors.darkViolet }}>{item.percentage}</Text>
-                                    <Text style={{ fontSize: 16, color: colors.orange }}>{item.status}</Text>
-                                    <Text style={{ fontSize: 13, color: colors.darkViolet }}>12 March 2023</Text>
-                                </View>
-                            </View>
-                        )
-                    }}
-                />
-            </ScrollView> */}
-
-            {/* <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
-                <FlatList
-                    data={Drawings2}
-                    numColumns={2}
-                    contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => {
-                        return (
-                            <View style={{ borderWidth: 0, marginHorizontal: WIDTH * 0.03, marginVertical: HEIGHT * 0.01 }}>
-                                <Image source={item.icon} style={{ width: WIDTH * 0.4, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} />
-                            </View>
-                        )
-                    }}
-                />
-            </ScrollView> */}
-
-            <ScrollView style={{ marginHorizontal: WIDTH * 0.05 }} showsVerticalScrollIndicator={false}>
-                {selectionMode === 'column' && (
+            </View >
+            {/* grid navigation */}
+            {/* tab navigation */}
+            <View style={{ backgroundColor: colors.grey, flexDirection: "row", marginHorizontal: WIDTH * 0.05, padding: HEIGHT * 0.004, borderRadius: WIDTH * 0.01 }}>
+                <Pressable onPress={() => selectFilter('all')} style={{ flex: 0.33, alignItems: 'center', borderWidth: 0, backgroundColor: selectedFilter === 'all' ? colors.white : colors.grey, margin: WIDTH * 0.003, borderRadius: WIDTH * 0.01 }}>
+                    <Text style={{ color: selectedFilter === 'all' ? colors.black : colors.lightGrey }}>All</Text>
+                </Pressable>
+                <Pressable onPress={() => selectFilter('home')} style={{ flex: 0.34, alignItems: 'center', borderWidth: 0, backgroundColor: selectedFilter === 'home' ? colors.white : colors.grey, margin: WIDTH * 0.003, borderRadius: WIDTH * 0.01 }}>
+                    <Text style={{ color: selectedFilter === 'home' ? colors.black : colors.lightGrey }}>Home</Text>
+                </Pressable>
+                <Pressable onPress={() => selectFilter('school')} style={{ flex: 0.33, alignItems: 'center', borderWidth: 0, backgroundColor: selectedFilter === 'school' ? colors.white : colors.grey, margin: WIDTH * 0.003, borderRadius: WIDTH * 0.01 }}>
+                    <Text style={{ color: selectedFilter === 'school' ? colors.black : colors.lightGrey }}>School</Text>
+                </Pressable>
+            </View>
+            {/* tab navigation */}
+            <View style={{ marginHorizontal: WIDTH * 0.05, borderWidth: 0.0, marginTop: 20 }}>
+                {selectedTab === 'grid' ? (
                     <FlatList
-                        data={Drawings2}
+                        key="grid"
+                        data={DATA}
                         numColumns={2}
-                        contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+                        contentContainerStyle={{ justifyContent: "center", alignItems: 'center', }}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => {
+                        renderItem={({ item, index }) => {
                             return (
-                                <View style={{ borderWidth: 0, marginHorizontal: WIDTH * 0.03, marginVertical: HEIGHT * 0.01 }}>
-                                    <Image source={item.icon} style={{ width: WIDTH * 0.4, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} />
+                                <View style={{ margin: 10, borderRadius: WIDTH * 0.02 }}>
+                                    <Image source={item.icon} style={{ width: WIDTH * 0.4, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} /* resizeMode='contain' */ />
                                 </View>
-                            );
+                            )
+                        }}
+                    />
+                ) : (
+                    <FlatList
+                        key="col"
+                        data={DATA}
+                        numColumns={1}
+                        contentContainerStyle={{}}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <View style={{ borderRadius: WIDTH * 0.02, flexDirection: "row" }}>
+                                    <Image source={item.icon} style={{ width: WIDTH * 0.44, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02, marginTop: 10 }} resizeMode='contain' />
+                                    <View style={{ flexDirection: 'column', marginHorizontal: WIDTH * 0.04, marginVertical: HEIGHT * 0.02 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Image source={cont} tintColor={colors.violet} />
+                                            <Text style={{ fontSize: 12, marginHorizontal: WIDTH * 0.015 }}>{item.name}</Text>
+                                        </View>
+                                        <Text style={{ fontSize: 16, marginVertical: HEIGHT * 0.01 }}>{item.status}</Text>
+                                        <Text style={{ fontSize: 13, color: colors.darkViolet }}>{item.date}</Text>
+                                    </View>
+                                </View>
+                            )
                         }}
                     />
                 )}
-            </ScrollView>
-
-        </View >
+            </View>
+        </SafeAreaView >
     )
 }
 
-
 export default DrawingsScreen
-
-
-// renderItem = {({ item }) => (
-//     <View style={{ flexDirection: "row", borderRadius: WIDTH * 0.03 }}>
-//         <View style={{ marginVertical: HEIGHT * 0.02, }}>
-//             <Image source={item.icon} style={{ width: WIDTH * 0.3, height: HEIGHT * 0.15, borderRadius: WIDTH * 0.02 }} />
-//         </View>
-//         <View style={{ marginHorizontal: WIDTH * 0.05, marginVertical: HEIGHT * 0.02 }}>
-//             <Text style={{ fontSize: 14, color: colors.darkViolet }}>{item.name}</Text>
-//             <Text style={{ fontSize: 40, color: colors.darkViolet }}>{item.percentage}</Text>
-//             <Text style={{ fontSize: 16, color: colors.orange }}>{item.status}</Text>
-//             <Text style={{ fontSize: 13, color: colors.darkViolet }}>12 March 2023</Text>
-//         </View>
-//     </View>
-// )}

@@ -14,9 +14,9 @@ const HeaderComponent = (props) => {
             <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ fontSize: fontsize, color: colors.titleColor, fontWeight: '500', textAlign: 'center' }}>{title}</Text>
             </View>
-            {/* <Pressable style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
+            <Pressable style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
                 <Text>{ }</Text>
-            </Pressable > */}
+            </Pressable >
         </View>
     )
 }

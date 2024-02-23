@@ -76,6 +76,7 @@ android {
     namespace "com.ezra"
     defaultConfig {
         applicationId "com.ezra"
+        vectorDrawables.useSupportLibrary = true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

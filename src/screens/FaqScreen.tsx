@@ -37,7 +37,7 @@ const FaqScreen = () => {
         <View style={{ flex: 1, backgroundColor: colors.white }}>
             <ImageBackground source={shadedIcon} style={{ width: WIDTH, height: HEIGHT * 0.15 }}>
                 <SafeAreaView>
-                    <HeaderComponent title="FAQ" backArrow={backArrow} Width={WIDTH * 0.045} Height={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
+                    <HeaderComponent title="FAQ" backArrow={backArrow} imageWidth={WIDTH * 0.045} imageHeight={HEIGHT * 0.022} navigation={() => Navigation.goBack()} fontsize={18} />
                 </SafeAreaView>
             </ImageBackground>
             <View style={{ flex: 1, marginTop: 0 }}>
